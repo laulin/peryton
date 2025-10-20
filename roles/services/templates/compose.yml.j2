@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   # https://belginux.com/installer-wireguard-easy-avec-docker/
   vpn:
@@ -22,27 +21,25 @@ services:
         - WG_DEFAULT_DNS=172.19.0.10
         - LANG=fr
     networks:
-      - front_net
+      front_net:
+        ipv4_address: 172.19.0.30
 
-  # caddy:
-  #   image: caddy:2
-  #   container_name: caddy
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - /server/caddy/Caddyfile:/etc/caddy/Caddyfile
-  #     - /server/caddy/logs:/var/log/caddy
-  #     - caddy_data:/data
-  #     - caddy_config:/config
-  #   networks:
-  #     - n8n
-  #     - dmz
-      # networks:
-      #   front_net:
-      #     ipv4_address: 172.19.0.20     # stable si tu veux un A record DNS
-      #   back_net: {}
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /server/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /server/caddy/logs:/var/log/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      front_net:
+        ipv4_address: 172.19.0.20
+      back_net: {}
 
   dnsmasq:
     image: dockurr/dnsmasq
@@ -57,20 +54,20 @@ services:
       front_net:
         ipv4_address: 172.19.0.10
 
-  # homepage:
-  #   image: ghcr.io/gethomepage/homepage:latest
-  #   container_name: homepage
-  #   ports:
-  #     - 3000:3000/tcp
-  #   volumes:
-  #     - /server/homepage/config:/app/config 
-  #     - /server/homepage/images:/app/public/images
-  #   environment:
-  #     PUID: 1000
-  #     PGID: 1000
-  #   restart: unless-stopped
-  #   networks:
-  #     - n8n
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - /server/homepage/config:/app/config 
+      - /server/homepage/images:/app/public/images
+    environment:
+      PUID: 1000
+      PGID: 1000
+    restart: unless-stopped
+    networks:
+      back_net: {}
 
 
 networks:

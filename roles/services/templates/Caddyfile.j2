@@ -32,9 +32,39 @@ homepage.lan {
         -Server
     }
 
-    tls {
-        protocols tls1.3
+    tls internal
+
+
+    # Rediriger HTTP vers HTTPS
+    @http {
+        protocol http
     }
+    handle @http {
+        redir https://{host}{uri} permanent
+    }
+}
+
+vpn.lan {
+
+    log {
+        output file /var/log/caddy/homepage.access.log {
+            roll_size 10MiB
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
+
+    tls internal
 
 
     # Rediriger HTTP vers HTTPS
@@ -45,13 +75,4 @@ homepage.lan {
         redir https://{host}{uri} permanent
     }
 
-
-    handle @lan_access {
-        reverse_proxy homepage:3000
-    }
-
-    # deny all
-    handle {
-        respond "Forbidden" 403
-    }
 }
