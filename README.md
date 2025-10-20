@@ -1,2 +1,7 @@
 # peryton
-Environment for student work
+
+Self hosts service
+
+# deploy 
+
+ansible-playbook -u user -i hosts playbook.yml 

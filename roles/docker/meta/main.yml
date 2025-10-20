@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: "laulin"
+  description: "Install Docker & Docker Compose on Raspberry Pi OS"
+  min_ansible_version: 2.9
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+        - bookworm
+  arch:
+    - arm64
+    - armhf

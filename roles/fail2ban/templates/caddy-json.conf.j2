@@ -1,0 +1,5 @@
+# Fail2Ban filter for Caddy JSON logs
+
+[Definition]
+failregex = "client_ip":"<HOST>".*"https?://{{public_ip}}"
+ignoreregex =

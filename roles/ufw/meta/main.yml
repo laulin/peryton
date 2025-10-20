@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: "laulin"
+  description: "Role to configure UFW (firewall) on DMZ IPv4"
+  min_ansible_version: 2.9
+  platforms:
+    - name: Debian
+      versions:
+        - all

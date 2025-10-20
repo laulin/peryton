@@ -1,0 +1,31 @@
+---
+# tasks file for docker
+
+- name: Install prerequisites
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+    update_cache: yes
+
+- name: Install Docker using get.docker.com script
+  shell: curl -fsSL https://get.docker.com | sh
+  args:
+    creates: /usr/bin/docker
+
+- name: Install docker compose
+  apt:
+    name:
+      - docker-compose
+    state: present
+    update_cache: yes
+
+- name: Enable & start Docker service
+  systemd:
+    name: docker
+    enabled: yes
+    state: started

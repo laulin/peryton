@@ -1,0 +1,25 @@
+# Tasks to install and configure Fail2Ban and UFW
+
+- name: Install Fail2Ban
+  ansible.builtin.apt:
+    name: fail2ban
+    state: present
+    update_cache: yes
+
+- name: Create Fail2Ban filter for Caddy JSON logs
+  ansible.builtin.template:
+    src: caddy-json.conf.j2
+    dest: /etc/fail2ban/filter.d/{{ fail2ban_filter_name }}.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Fail2Ban
+
+- name: Create Fail2Ban jail configuration for Caddy
+  ansible.builtin.template:
+    src: caddy-json.local.j2
+    dest: /etc/fail2ban/jail.d/{{ fail2ban_jail_name }}.local
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Fail2Ban

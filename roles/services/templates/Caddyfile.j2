@@ -1,0 +1,165 @@
+{
+    # Global options block
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 100mb
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+        level INFO
+    }
+}
+
+{{n8n_fqdn}} {
+    log {
+        output file /var/log/caddy/n8n.access.log {
+            roll_size 10MiB
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
+
+    tls {
+        protocols tls1.3
+    }
+
+    # Rediriger HTTP vers HTTPS
+    @http {
+        protocol http
+    }
+    handle @http {
+        redir https://{host}{uri} permanent
+    }
+
+    # Webhooks accessibles à tous (internet + LAN), uniquement sur /webhook-prod/*
+    handle /webhook-test/* {
+        reverse_proxy n8n:5678
+    }
+
+    handle /webhook/* {
+        reverse_proxy n8n:5678
+    }
+
+    handle /webhook-waiting/* {
+        reverse_proxy n8n:5678
+    }
+
+    # Interface n8n : accessible UNIQUEMENT depuis les LANs, mais pas via /webhook-prod/*
+    @lan_access {
+        remote_ip {{ local_ip_ranges | join(' ') }}
+        not path /webhook-test/*
+    }
+    handle @lan_access {
+        reverse_proxy n8n:5678
+    }
+
+    # Tout le reste : refus (403)
+    handle {
+        respond "Forbidden" 403
+    }
+}
+
+{{nocodb_fqdn}} {
+
+    log {
+        output file /var/log/caddy/nocodb.access.log {
+            roll_size 10MiB
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
+
+    tls {
+        protocols tls1.3
+    }
+
+
+    # Rediriger HTTP vers HTTPS
+    @http {
+        protocol http
+    }
+    handle @http {
+        redir https://{host}{uri} permanent
+    }
+
+
+    @lan_access {
+        remote_ip {{ local_ip_ranges | join(' ') }}
+    }
+    handle @lan_access {
+        reverse_proxy nocodb:8080
+    }
+
+    # deny all
+    handle {
+        respond "Forbidden" 403
+    }
+}
+
+{{homepage_fqdn}} {
+
+    log {
+        output file /var/log/caddy/homepage.access.log {
+            roll_size 10MiB
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
+
+    tls {
+        protocols tls1.3
+    }
+
+
+    # Rediriger HTTP vers HTTPS
+    @http {
+        protocol http
+    }
+    handle @http {
+        redir https://{host}{uri} permanent
+    }
+
+
+    @lan_access {
+        remote_ip {{ local_ip_ranges | join(' ') }}
+    }
+    handle @lan_access {
+        reverse_proxy homepage:3000
+    }
+
+    # deny all
+    handle {
+        respond "Forbidden" 403
+    }
+}

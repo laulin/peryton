@@ -1,0 +1,12 @@
+# Fail2Ban jail configuration for Caddy
+
+[{{ fail2ban_jail_name }}]
+enabled = true
+filter = {{ fail2ban_filter_name }}
+logpath = {{ fail2ban_logpath }}
+backend = auto
+bantime = {{ fail2ban_bantime }}
+findtime = {{ fail2ban_findtime }}
+maxretry = {{ fail2ban_maxretry }}
+action = ufw
+ignoreip = {{ local_ip_ranges | join(' ') }}

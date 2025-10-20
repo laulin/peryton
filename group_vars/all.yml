@@ -1,0 +1,37 @@
+directories:
+  - path: /server
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/caddy
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/caddy/logs
+    owner: "root"
+    group: "root"
+    mode: '0755'
+  - path: /server/n8n
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/dnsmasq
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/nocodb
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/homepage
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/homepage/config
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/homepage/images
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'

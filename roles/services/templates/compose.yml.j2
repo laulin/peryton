@@ -1,0 +1,95 @@
+version: "3.9"
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    environment:
+      - N8N_BASIC_AUTH_USER={{n8n_user}}
+      - N8N_BASIC_AUTH_PASSWORD={{n8n_password}}
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_SECURE_COOKIE=true
+      - WEBHOOK_URL=https://{{n8n_fqdn}}
+    volumes:
+      - /server/n8n/volume:/home/node/.n8n
+      - /server/n8n/data:/data
+    networks:
+      - n8n
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /server/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /server/caddy/logs:/var/log/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - n8n
+      - dmz
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks:
+      - n8n
+
+  dnsmasq:
+    image: dockurr/dnsmasq
+    container_name: dnsmasq
+    environment:
+      DNS1: "94.140.14.14"
+      DNS2: "94.140.15.15"
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - /server/dnsmasq/:/etc/dnsmasq.d/
+    restart: unless-stopped
+
+  nocodb: 
+    container_name: nocodb
+    image: "nocodb/nocodb:latest"
+    networks:
+      - n8n
+    restart: unless-stopped
+    volumes: 
+      - "/server/nocodb:/usr/app/data"
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - /server/homepage/config:/app/config 
+      - /server/homepage/images:/app/public/images
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: "{{homepage_fqdn}}"
+      PUID: 1000
+      PGID: 1000
+    restart: unless-stopped
+    networks:
+      - n8n
+
+
+networks:
+  n8n:
+    external: true
+  dmz:
+    external: true
+
+volumes:
+  caddy_data:
+  caddy_config:
+  redis_data:

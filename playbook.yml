@@ -1,0 +1,11 @@
+- hosts: peryton
+  become: true
+  roles:
+    - role : docker
+      tags : [docker]
+    - role : services
+      tags : [services]
+    - role : ufw
+      tags : [ufw, fail2ban]
+    - role : fail2ban
+      tags : [fail2ban]

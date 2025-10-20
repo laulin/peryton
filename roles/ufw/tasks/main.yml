@@ -1,0 +1,64 @@
+---
+- name: Install UFW
+  apt:
+    name: ufw
+    state: present
+    update_cache: yes
+
+- name: Reset UFW rules
+  command: ufw --force reset
+
+- name: Disable UFW before configuration
+  ufw:
+    state: disabled
+
+- name: Set default policy for incoming traffic (deny)
+  ufw:
+    direction: incoming
+    policy: deny
+
+- name: Set default policy for outgoing traffic (allow)
+  ufw:
+    direction: outgoing
+    policy: allow
+
+# Allow SSH from internal networks defined in the vault
+- name: Allow SSH from internal networks
+  ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+    from_ip: "{{ item }}"
+  loop: "{{ ssh_allowed_networks }}"
+
+# Allow HTTP (80) from everywhere
+- name: Allow HTTP (80) from anywhere
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+# Allow HTTPS (443) from everywhere
+- name: Allow HTTPS (443) from anywhere
+  ufw:
+    rule: allow
+    port: 443
+    proto: tcp
+
+# Allow DNS (53) TCP and UDP from everywhere
+- name: Allow DNS (53) TCP from anywhere
+  ufw:
+    rule: allow
+    port: 53
+    proto: tcp
+
+- name: Allow DNS (53) UDP from anywhere
+  ufw:
+    rule: allow
+    port: 53
+    proto: udp
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+    direction: in
