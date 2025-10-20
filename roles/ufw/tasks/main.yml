@@ -28,34 +28,11 @@
     rule: allow
     port: 22
     proto: tcp
-    from_ip: "{{ item }}"
-  loop: "{{ ssh_allowed_networks }}"
 
-# Allow HTTP (80) from everywhere
-- name: Allow HTTP (80) from anywhere
+- name: Allow Wireguard (51820) UDP from anywhere
   ufw:
     rule: allow
-    port: 80
-    proto: tcp
-
-# Allow HTTPS (443) from everywhere
-- name: Allow HTTPS (443) from anywhere
-  ufw:
-    rule: allow
-    port: 443
-    proto: tcp
-
-# Allow DNS (53) TCP and UDP from everywhere
-- name: Allow DNS (53) TCP from anywhere
-  ufw:
-    rule: allow
-    port: 53
-    proto: tcp
-
-- name: Allow DNS (53) UDP from anywhere
-  ufw:
-    rule: allow
-    port: 53
+    port: 51820
     proto: udp
 
 - name: Enable UFW
