@@ -37,8 +37,8 @@
 
 - name: homepage image
   ansible.builtin.copy:
-    src: peryton.jpeg
-    dest: /server/homepage/images/peryton.jpeg
+    src: peryton.png
+    dest: /server/homepage/images/peryton.png
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0644'
@@ -60,17 +60,17 @@
     mode: '0644'
 
 - name: Stop compose
-  shell: docker-compose down
+  shell: docker compose down
   args:
     chdir: /server
   ignore_errors: yes
 
 - name: Update images
-  shell: docker-compose pull
+  shell: docker compose pull
   args:
     chdir: /server
 
 - name: Start compose
-  shell: docker-compose up -d
+  shell: docker compose up -d
   args:
     chdir: /server

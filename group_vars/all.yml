@@ -11,15 +11,7 @@ directories:
     owner: "root"
     group: "root"
     mode: '0755'
-  - path: /server/n8n
-    owner: "{{user}}"
-    group: "{{user}}"
-    mode: '0755'
   - path: /server/dnsmasq
-    owner: "{{user}}"
-    group: "{{user}}"
-    mode: '0755'
-  - path: /server/nocodb
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
@@ -32,6 +24,10 @@ directories:
     group: "{{user}}"
     mode: '0755'
   - path: /server/homepage/images
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/wg-easy
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'

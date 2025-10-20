@@ -3,10 +3,4 @@
 local=/lan/
 domain=lan
 
-address=/{{n8n_fqdn}}/{{ip}}
-address=/{{nocodb_fqdn}}/{{ip}}
-address=/{{homepage_fqdn}}/{{ip}}
-
-{% for hostname, ip in fqdns.items() %}
-address=/{{ hostname }}/{{ ip }}
-{% endfor %}
+adress=/homepage.lan/172.19.0.20
