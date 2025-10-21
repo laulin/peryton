@@ -3,6 +3,8 @@
   roles:
     - role : docker
       tags : [docker]
+    - role : certificats
+      tags : [services, certificats]
     - role : services
       tags : [services]
     - role : ufw

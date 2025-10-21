@@ -34,6 +34,8 @@ services:
     volumes:
       - /server/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /server/caddy/logs:/var/log/caddy
+      - /server/pki/certs:/certs:ro
+      - /server/pki/crl:/crl:ro
       - caddy_data:/data
       - caddy_config:/config
     networks:

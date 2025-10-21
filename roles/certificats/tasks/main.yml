@@ -1,0 +1,172 @@
+---
+- name: Install prerequisites
+  apt:
+    name:
+      - openssl
+    state: present
+    update_cache: yes
+
+- name: Ensure directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - "{{ ca_dir }}"
+    - "{{ certs_dir }}"
+
+- name: Check if CA cert exists
+  stat:
+    path: "{{ ca_crt }}"
+  register: ca_crt_stat
+
+- name: Generate CA private key (4096 bits) if missing
+  command: >
+    openssl genrsa -out "{{ ca_key }}" 4096
+  args:
+    creates: "{{ ca_key }}"
+  when: not ca_crt_stat.stat.exists
+
+- name: Generate CA self-signed cert (10 years) if missing
+  command: >
+    openssl req -x509 -new -nodes
+      -key "{{ ca_key }}"
+      -sha256
+      -days {{ ca_days }}
+      -subj "{{ ca_subject }}"
+      -out "{{ ca_crt }}"
+  args:
+    creates: "{{ ca_crt }}"
+  when: not ca_crt_stat.stat.exists
+
+- name: Ensure CA key perms are restrictive
+  file:
+    path: "{{ ca_key }}"
+    owner: root
+    group: root
+    mode: '0600'
+  when: ca_crt_stat.stat.exists or (not ca_crt_stat.stat.exists)
+
+- name: Create OpenSSL SAN config for wildcard certificate
+  copy:
+    dest: "{{ openssl_san_conf }}"
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      [req]
+      default_bits       = 2048
+      prompt             = no
+      default_md         = sha256
+      distinguished_name = dn
+      req_extensions     = v3_req
+
+      [dn]
+      C = FR
+      ST = Île-de-France
+      L = Paris
+      O = local
+      OU = caddy
+      CN = *.lan
+
+      [v3_req]
+      subjectAltName = @alt_names
+
+      [alt_names]
+      DNS.1 = *.lan
+      DNS.2 = lan
+
+- name: Check if wildcard cert exists
+  stat:
+    path: "{{ wildcard_crt }}"
+  register: wildcard_crt_stat
+
+- name: Generate wildcard private key (2048 bits) if missing
+  command: >
+    openssl genrsa -out "{{ wildcard_key }}" 2048
+  args:
+    creates: "{{ wildcard_key }}"
+  when: not wildcard_crt_stat.stat.exists
+
+- name: Generate CSR for wildcard (*.lan)
+  command: >
+    openssl req -new
+      -key "{{ wildcard_key }}"
+      -out "{{ wildcard_csr }}"
+      -config "{{ openssl_san_conf }}"
+  args:
+    creates: "{{ wildcard_csr }}"
+  when: not wildcard_crt_stat.stat.exists
+
+- name: Sign CSR with local CA to produce wildcard certificate (1 year)
+  command: >
+    openssl x509 -req
+      -in "{{ wildcard_csr }}"
+      -CA "{{ ca_crt }}"
+      -CAkey "{{ ca_key }}"
+      -CAcreateserial
+      -out "{{ wildcard_crt }}"
+      -days {{ wildcard_days }}
+      -sha256
+      -extfile "{{ openssl_san_conf }}"
+      -extensions v3_req
+  args:
+    creates: "{{ wildcard_crt }}"
+  when: not wildcard_crt_stat.stat.exists
+
+- name: Ensure wildcard key permissions (private)
+  file:
+    path: "{{ wildcard_key }}"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Ensure wildcard cert perms (public)
+  file:
+    path: "{{ wildcard_crt }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure CA cert is world-readable (for caddy to use)
+  file:
+    path: "{{ ca_crt }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure CLR directory exists
+  ansible.builtin.file:
+    path: "{{ crl_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy Root CA into certs dir (for container mount)
+  ansible.builtin.copy:
+    src: "{{ ca_crt }}"
+    dest: "{{ certs_dir }}/{{ ca_export_name }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy Root CA into CLR dir (for distribution to clients)
+  ansible.builtin.copy:
+    src: "{{ ca_crt }}"
+    dest: "{{ crl_dir }}/{{ ca_export_name }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Show resulting files (summary)
+  debug:
+    msg:
+      - "CA key: {{ ca_key }}"
+      - "CA cert: {{ ca_crt }}"
+      - "Wildcard key: {{ wildcard_key }}"
+      - "Wildcard cert: {{ wildcard_crt }}"

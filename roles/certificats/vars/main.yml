@@ -1,0 +1,19 @@
+---
+
+ca_dir: /server/pki/localca
+crl_dir: /server/pki/crl
+certs_dir: /server/pki/certs
+ca_key: "{{ ca_dir }}/ca.key"
+ca_crt: "{{ ca_dir }}/ca.crt"
+ca_serial: "{{ ca_dir }}/ca.srl"
+wildcard_key: "{{ certs_dir }}/wildcard.lan.key"
+wildcard_csr: "{{ certs_dir }}/wildcard.lan.csr"
+wildcard_crt: "{{ certs_dir }}/wildcard.lan.crt"
+openssl_san_conf: "{{ certs_dir }}/san_wildcard.cnf"
+# Subject par défaut — personnalise si besoin
+ca_subject: "/C=FR/ST=Île-de-France/L=Paris/O=LocalCA/OU=IT/CN=Local Root CA"
+wildcard_subject: "/C=FR/ST=Île-de-France/L=Paris/O=local/OU=caddy/CN=*.lan"
+# Durées
+ca_days: 3650    # 10 ans
+wildcard_days: 365
+ca_export_name: "ca-root.crt" 
