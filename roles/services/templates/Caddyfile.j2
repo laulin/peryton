@@ -25,14 +25,14 @@ homepage.lan {
 
     tls internal
 
-
-    # # Rediriger HTTP vers HTTPS
-    # @http {
-    #     protocol http
-    # }
-    # handle @http {
-    #     redir https://{host}{uri} permanent
-    # }
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
 
     reverse_proxy 172.20.0.10:3000
 }
@@ -48,25 +48,16 @@ vpn.lan {
         }
     }
 
-    # header {
-    #     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-    #     X-Content-Type-Options "nosniff"
-    #     X-Frame-Options "SAMEORIGIN"
-    #     Referrer-Policy "no-referrer"
-    #     Permissions-Policy "geolocation=(), microphone=()"
-    #     -Server
-    # }
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
 
     tls internal
-
-
-    # # Rediriger HTTP vers HTTPS
-    # @http {
-    #     protocol http
-    # }
-    # handle @http {
-    #     redir https://{host}{uri} permanent
-    # }
 
     reverse_proxy 172.19.0.30:51821
 
