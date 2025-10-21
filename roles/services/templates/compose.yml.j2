@@ -42,19 +42,6 @@ services:
       back_net: 
         ipv4_address: 172.20.0.20
 
-  dnsmasq:
-    image: dockurr/dnsmasq
-    container_name: dnsmasq
-    environment:
-      DNS1: "94.140.14.14"
-      DNS2: "94.140.15.15"
-    volumes:
-      - /server/dnsmasq/:/etc/dnsmasq.d/
-    restart: unless-stopped
-    networks:
-      front_net:
-        ipv4_address: 172.19.0.10
-
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
@@ -83,6 +70,19 @@ services:
       - /server/gogs:/data
     environment:
       - TZ=Europe/Paris
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    environment:
+      TZ: 'Europe/Paris'
+      FTLCONF_webserver_api_password: {{pihole_admin_password}}
+    volumes:
+      - '/server/pihole/etc-pihole:/etc/pihole'
+    restart: unless-stopped
+    networks:
+      front_net:
+        ipv4_address: 172.19.0.10
 
 
 networks:

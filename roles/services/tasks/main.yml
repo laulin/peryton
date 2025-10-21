@@ -19,18 +19,16 @@
     group: "{{user}}"
     mode: '0640'
 
+- name: Stop compose
+  shell: docker compose down
+  args:
+    chdir: /server
+  ignore_errors: yes
+
 - name: Copy caddyfile
   template:
     src: Caddyfile.j2
     dest: /server/caddy/Caddyfile
-    owner: "{{user}}"
-    group: "{{user}}"
-    mode: '0644'
-
-- name: Copy dnsmasq
-  template:
-    src: local.conf.j2
-    dest: /server/dnsmasq/local.conf
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0644'
@@ -67,11 +65,15 @@
     group: "{{user}}"
     mode: '0644'
 
-- name: Stop compose
-  shell: docker compose down
-  args:
-    chdir: /server
-  ignore_errors: yes
+- name: pihole configuration file
+  copy:
+    src: pihole.toml
+    dest: /server/pihole/etc-pihole/pihole.toml
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0644'
+
+
 
 - name: Update images
   shell: docker compose pull

@@ -88,3 +88,29 @@ gogs.lan {
     reverse_proxy 172.20.0.40:3000
 
 }
+
+pihole.lan {
+
+    log {
+        output file /var/log/caddy/pihole.access.log {
+            roll_size 10MiB
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+    }
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "no-referrer"
+        Permissions-Policy "geolocation=(), microphone=()"
+        -Server
+    }
+
+    tls internal
+
+    reverse_proxy 172.19.0.10:80
+
+}

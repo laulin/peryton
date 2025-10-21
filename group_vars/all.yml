@@ -43,3 +43,12 @@ directories:
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+
+  - path: /server/pihole
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/pihole/etc-pihole
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
