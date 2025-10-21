@@ -39,7 +39,8 @@ services:
     networks:
       front_net:
         ipv4_address: 172.19.0.20
-      back_net: {}
+      back_net: 
+        ipv4_address: 172.20.0.20
 
   dnsmasq:
     image: dockurr/dnsmasq
@@ -57,17 +58,17 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage
-    ports:
-      - 3000:3000/tcp
     volumes:
       - /server/homepage/config:/app/config 
       - /server/homepage/images:/app/public/images
     environment:
       PUID: 1000
       PGID: 1000
+      HOMEPAGE_ALLOWED_HOSTS: "*" # unsecured 
     restart: unless-stopped
     networks:
-      back_net: {}
+      back_net:
+        ipv4_address: 172.20.0.10
 
 
 networks:
