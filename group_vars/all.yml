@@ -31,3 +31,15 @@ directories:
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+  - path: /server/gogs
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/gogs/gogs
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/gogs/gogs/conf
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'

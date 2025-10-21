@@ -59,6 +59,14 @@
     group: "{{user}}"
     mode: '0644'
 
+- name: gogs configuration file
+  copy:
+    src: app.ini
+    dest: /server/gogs/gogs/conf/app.ini
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0644'
+
 - name: Stop compose
   shell: docker compose down
   args:
