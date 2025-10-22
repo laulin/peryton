@@ -3,6 +3,7 @@ directories:
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+
   - path: /server/caddy
     owner: "{{user}}"
     group: "{{user}}"
@@ -11,10 +12,7 @@ directories:
     owner: "root"
     group: "root"
     mode: '0755'
-  - path: /server/dnsmasq
-    owner: "{{user}}"
-    group: "{{user}}"
-    mode: '0755'
+
   - path: /server/homepage
     owner: "{{user}}"
     group: "{{user}}"
@@ -27,10 +25,12 @@ directories:
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+
   - path: /server/wg-easy
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+
   - path: /server/gogs
     owner: "{{user}}"
     group: "{{user}}"
@@ -49,6 +49,15 @@ directories:
     group: "{{user}}"
     mode: '0755'
   - path: /server/pihole/etc-pihole
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+
+  - path: /server/ressources
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/ressources/courses
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'

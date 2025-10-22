@@ -49,6 +49,14 @@
     group: "{{user}}"
     mode: '0644'
 
+- name: homepage bookmark
+  ansible.builtin.copy:
+    src: bookmarks.yaml
+    dest: /server/homepage/config/bookmarks.yaml
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0644'
+
 - name: homepage services
   template:
     src: services.yaml.j2

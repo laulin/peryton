@@ -36,6 +36,7 @@ services:
       - /server/caddy/logs:/var/log/caddy
       - /server/pki/certs:/certs:ro
       - /server/pki/crl:/crl:ro
+      - /server/ressources:/ressources:ro
       - caddy_data:/data
       - caddy_config:/config
     networks:
@@ -58,6 +59,8 @@ services:
     networks:
       back_net:
         ipv4_address: 172.20.0.10
+    dns:
+      - 172.19.0.10
 
   gogs:
     image: gogs/gogs:latest

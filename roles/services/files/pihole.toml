@@ -208,7 +208,8 @@
     "gogs.lan,caddy.lan",
     "homepage.lan,caddy.lan",
     "pihole.lan,caddy.lan",
-    "crl.lan,caddy.lan"
+    "crl.lan,caddy.lan",
+    "ressources.lan,caddy.lan"
   ]
 
   # Port used by the DNS server

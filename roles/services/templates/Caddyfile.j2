@@ -134,6 +134,23 @@ crl.lan {
         }
     }
 
-	file_server /crl/*
+	root * /crl
+	file_server browse
+
+}
+
+ressources.lan {
+
+    log {
+        output file /var/log/caddy/crl.access.log {
+            roll_size 10MiB
+            roll_keep 5
+            roll_keep_for 240h
+            roll_uncompressed
+        }
+    }
+
+	root * /ressources
+	file_server browse
 
 }
