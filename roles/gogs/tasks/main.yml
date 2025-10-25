@@ -1,0 +1,90 @@
+---
+- name: Vérifier si la page /install est encore accessible
+  ansible.builtin.uri:
+    url: "{{ gogs_base_url }}/install"
+    method: GET
+    return_content: true
+    status_code: [200, 302, 404]
+    validate_certs: false
+  register: gogs_install_page
+  delegate_to: localhost
+  become: false
+
+- name: Déterminer si l'installation est nécessaire
+  ansible.builtin.set_fact:
+    needs_install: >-
+      {{ (gogs_install_page.status == 200)
+          and (gogs_install_page.content is search('action="/install"|name="db_type"|Install Gogs', ignorecase=True)) }}
+  delegate_to: localhost
+  become: false
+
+- name: Préparer le body du formulaire /install
+  ansible.builtin.set_fact:
+    gogs_install_form:
+      # --- DB ---
+      db_type: "{{ gogs_install.db_type }}"
+      db_host: "{{ gogs_install.db_host | default(omit) }}"
+      db_user: "{{ gogs_install.db_user | default(omit) }}"
+      db_passwd: "{{ gogs_install.db_passwd | default(omit) }}"
+      db_name: "{{ gogs_install.db_name | default(omit) }}"
+      db_path: "{{ gogs_install.db_path | default(omit) }}"
+      ssl_mode: "{{ gogs_install.ssl_mode | default(omit) }}"
+      # --- App/Serveur ---
+      app_name: "{{ gogs_install.app_name }}"
+      repo_root_path: "{{ gogs_install.repo_root_path }}"
+      run_user: "{{ gogs_install.run_user }}"
+      domain: "{{ gogs_install.domain }}"
+      ssh_port: "{{ gogs_install.ssh_port }}"
+      http_port: "{{ gogs_install.http_port }}"
+      app_url: "{{ gogs_install.app_url }}"
+      # --- SMTP ---
+      smtp_host: "{{ gogs_install.smtp_host | default(omit) }}"
+      smtp_from: "{{ gogs_install.smtp_from | default(omit) }}"
+      smtp_email: "{{ gogs_install.smtp_email | default(omit) }}"
+      smtp_passwd: "{{ gogs_install.smtp_passwd | default(omit) }}"
+      register_confirm: "{{ 'on' if gogs_install.register_confirm | default(false) else omit }}"
+      mail_notify: "{{ 'on' if gogs_install.mail_notify | default(false) else omit }}"
+      # --- Options ---
+      offline_mode: "{{ 'on' if gogs_install.offline_mode | default(false) else omit }}"
+      disable_gravatar: "{{ 'on' if gogs_install.disable_gravatar | default(false) else omit }}"
+      disable_registration: "{{ 'on' if gogs_install.disable_registration | default(false) else omit }}"
+      enable_captcha: "{{ 'on' if gogs_install.enable_captcha | default(false) else omit }}"
+      require_sign_in_view: "{{ 'on' if gogs_install.require_sign_in_view | default(false) else omit }}"
+      # --- Admin ---
+      admin_name: "{{ gogs_install.admin_name }}"
+      admin_passwd: "{{ gogs_install.admin_passwd }}"
+      admin_confirm_passwd: "{{ gogs_install.admin_passwd }}"
+      admin_email: "{{ gogs_install.admin_email }}"
+  delegate_to: localhost
+  become: false
+
+- name: POST /install pour initialiser Gogs
+  ansible.builtin.uri:
+    url: "{{ gogs_base_url }}/install"
+    method: POST
+    body_format: form-urlencoded
+    body: "{{ gogs_install_form }}"
+    return_content: true
+    status_code: 200
+    validate_certs: false
+  register: gogs_install_post
+  when: needs_install
+  # Masque le contenu (mots de passe, etc.)
+  no_log: true
+  changed_when: needs_install | bool
+  delegate_to: localhost
+  become: false
+
+- name: Attendre que la page de login réponde (post-install)
+  ansible.builtin.uri:
+    url: "{{ gogs_base_url }}/user/login"
+    method: GET
+    status_code: [200, 302]
+    validate_certs: false
+  register: gogs_login_check
+  until: gogs_login_check.status in [200, 302]
+  retries: 10
+  delay: 2
+  when: needs_install
+  delegate_to: localhost
+  become: false

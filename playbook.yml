@@ -7,6 +7,8 @@
       tags : [services, certificats]
     - role : services
       tags : [services]
+    - role : gogs
+      tags : [services,gogs]
     - role : ufw
       tags : [ufw, fail2ban]
     - role : fail2ban

@@ -1,0 +1,116 @@
+---
+# vars file for docker
+# https://github.com/gogs/gogs/blob/main/templates/install.tmpl
+gogs_base_url: "https://gogs.lan"
+
+gogs_install:
+  # --- Base de données ---
+  db_type: "SQLite3"   
+  db_path: "data/gogs.db"  # requis si SQLite/TiDB
+
+  # --- Application & serveur ---
+  app_name: "Gogs"
+  repo_root_path: "/data/git/gogs-repositories"
+  run_user: "git"
+  domain: "gogs.lan"
+  ssh_port: "22"
+  http_port: "3000"
+  app_url: "http://gogs.lan/"
+
+  # --- SMTP (optionnel) ---
+  smtp_host: "{{smtp_domain}}:{{smtp_port}}"
+  smtp_from: "Gogs <no-reply@gog.lan>"
+  smtp_email: "gog.lan"
+  smtp_passwd: "{{smtp_secret}}"
+  register_confirm: true
+  mail_notify: true
+
+  # --- Options (optionnel) ---
+  # offline_mode: true
+  # disable_gravatar: true
+  # disable_registration: true
+  # enable_captcha: true
+  # require_sign_in_view: true
+
+  # --- Compte admin initial ---
+  admin_name: "{{gogs_admin_user}}"
+  admin_passwd: "{{gogs_admin_password}}"
+  admin_confirm_passwd: "{{gogs_admin_password}}"
+  admin_email: "{{gogs_admin_email}}"
+
+  # disable registration
+  disable_registration: true
+  use_builtin_ssh_server: true
+  ssh_port: 22
+
+
+# geniune configuration : 
+
+# BRAND_NAME = Gogs
+# RUN_USER   = git
+# RUN_MODE   = prod
+
+# [server]
+# ; The public-facing domain name for the application.
+# DOMAIN           = gogs.lan
+# ; The protocol that is used to serve direct traffic to the application.
+# ; Currently supports "http", "https", "fcgi" and "unix".
+# PROTOCOL         = http
+# ; The address to be listened by the application.
+# HTTP_ADDR        = 0.0.0.0
+# ; The port number to be listened by the application.
+# HTTP_PORT        = 3000
+# EXTERNAL_URL     = http://gogs.lan/
+# DISABLE_SSH      = false
+# SSH_PORT         = 22
+# START_SSH_SERVER = false
+# OFFLINE_MODE     = false
+
+# [database]
+# TYPE     = sqlite3
+# HOST     = 127.0.0.1:5432
+# NAME     = gogs
+# SCHEMA   = public
+# USER     = gogs
+# PASSWORD = 
+# SSL_MODE = disable
+# PATH     = data/gogs.db
+
+# [repository]
+# ROOT           = /data/git/gogs-repositories
+# DEFAULT_BRANCH = master
+
+# [mailer]
+# ENABLED = true
+# HOST = {{smtp_domain}}:{{smtp_port}}
+# LOGIN = true
+# USER = {{smtp_user}}
+# PASSWD = {{smtp_secret}}
+# FROM = "Gogs" <gogs@gogs.lan>
+
+# [auth]
+# REQUIRE_EMAIL_CONFIRMATION  = false
+# DISABLE_REGISTRATION        = false
+# ENABLE_REGISTRATION_CAPTCHA = true
+# REQUIRE_SIGNIN_VIEW         = false
+
+# [user]
+# ENABLE_EMAIL_NOTIFICATION = false
+
+# [picture]
+# DISABLE_GRAVATAR        = false
+# ENABLE_FEDERATED_AVATAR = false
+
+# [session]
+# PROVIDER = file
+
+# [log]
+# MODE      = file
+# LEVEL     = Info
+# ROOT_PATH = /app/gogs/log
+
+# [security]
+# INSTALL_LOCK = true
+# SECRET_KEY   = XXXX
+
+
