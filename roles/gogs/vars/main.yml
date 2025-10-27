@@ -15,7 +15,7 @@ gogs_install:
   domain: "gogs.lan"
   ssh_port: "22"
   http_port: "3000"
-  app_url: "http://gogs.lan/"
+  app_url: "https://gogs.lan/"
 
   # --- SMTP (optionnel) ---
   smtp_host: "{{smtp_domain}}:{{smtp_port}}"

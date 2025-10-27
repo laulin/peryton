@@ -1,4 +1,6 @@
 ---
+# need to be fixed
+
 - name: Vérifier si la page /install est encore accessible
   ansible.builtin.uri:
     url: "{{ gogs_base_url }}/install"
@@ -6,21 +8,37 @@
     return_content: true
     status_code: [200, 302, 404]
     validate_certs: false
-  register: gogs_install_page
+  register: gogs_install_get
   delegate_to: localhost
   become: false
 
 - name: Déterminer si l'installation est nécessaire
   ansible.builtin.set_fact:
     needs_install: >-
-      {{ (gogs_install_page.status == 200)
-          and (gogs_install_page.content is search('action="/install"|name="db_type"|Install Gogs', ignorecase=True)) }}
+      {{ (gogs_install_get.status == 200)
+          and (gogs_install_get.content is search('action="/install"|name="db_type"|Install Gogs', ignorecase=True)) }}
   delegate_to: localhost
   become: false
+
+- name: Extraire le token CSRF depuis Set-Cookie
+  ansible.builtin.set_fact:
+    gogs_csrf: "{{ (gogs_install_get.set_cookie | regex_findall('_csrf=([^;]+)')) | first }}"
+  when: needs_install
+
+# (optionnel) Sécurité : échouer si on n'a pas trouvé le token
+- name: Vérifier que _csrf a été extrait
+  ansible.builtin.assert:
+    that: 
+      - gogs_csrf is defined 
+      - gogs_csrf | length > 0
+    fail_msg: "Impossible d'extraire _csrf depuis Set-Cookie: {{ gogs_install_get.set_cookie }}"
+  when: needs_install
+
 
 - name: Préparer le body du formulaire /install
   ansible.builtin.set_fact:
     gogs_install_form:
+      _csrf: "{{ gogs_csrf }}"
       # --- DB ---
       db_type: "{{ gogs_install.db_type }}"
       db_host: "{{ gogs_install.db_host | default(omit) }}"
@@ -55,36 +73,40 @@
       admin_passwd: "{{ gogs_install.admin_passwd }}"
       admin_confirm_passwd: "{{ gogs_install.admin_passwd }}"
       admin_email: "{{ gogs_install.admin_email }}"
-  delegate_to: localhost
-  become: false
-
-- name: POST /install pour initialiser Gogs
-  ansible.builtin.uri:
-    url: "{{ gogs_base_url }}/install"
-    method: POST
-    body_format: form-urlencoded
-    body: "{{ gogs_install_form }}"
-    return_content: true
-    status_code: 200
-    validate_certs: false
-  register: gogs_install_post
   when: needs_install
-  # Masque le contenu (mots de passe, etc.)
-  no_log: true
-  changed_when: needs_install | bool
-  delegate_to: localhost
-  become: false
 
-- name: Attendre que la page de login réponde (post-install)
-  ansible.builtin.uri:
-    url: "{{ gogs_base_url }}/user/login"
-    method: GET
-    status_code: [200, 302]
-    validate_certs: false
-  register: gogs_login_check
-  until: gogs_login_check.status in [200, 302]
-  retries: 10
-  delay: 2
-  when: needs_install
-  delegate_to: localhost
-  become: false
+
+# - name: POST /install pour initialiser Gogs
+#   ansible.builtin.uri:
+#     url: "{{ gogs_base_url }}/install"
+#     method: POST
+#     body_format: form-urlencoded
+#     body: "{{gogs_install_form}}"
+#     body_format: form-urlencoded
+#     headers:
+#       Content-Type: "application/x-www-form-urlencoded"
+#       Referer: "{{ gogs_base_url }}/install"
+#       Origin: "{{ gogs_base_url }}"
+#       Cookies: "{{ gogs_install_get.set_cookie }}"    
+#     return_content: true
+#     status_code: [200, 302, 404]
+#     validate_certs: false
+#   register: gogs_install_resp
+#   when: needs_install
+#   delegate_to: localhost
+#   become: false
+#   no_log: false
+
+# - name: Attendre que la page de login réponde (post-install)
+#   ansible.builtin.uri:
+#     url: "{{ gogs_base_url }}/user/login"
+#     method: GET
+#     status_code: [200]
+#     validate_certs: false
+#   register: gogs_login_check
+#   until: gogs_login_check.status in [200]
+#   retries: 10
+#   delay: 2
+#   when: needs_install
+#   delegate_to: localhost
+#   become: false
