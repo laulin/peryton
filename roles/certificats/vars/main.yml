@@ -6,13 +6,13 @@ certs_dir: /server/pki/certs
 ca_key: "{{ ca_dir }}/ca.key"
 ca_crt: "{{ ca_dir }}/ca.crt"
 ca_serial: "{{ ca_dir }}/ca.srl"
-wildcard_key: "{{ certs_dir }}/wildcard.lan.key"
-wildcard_csr: "{{ certs_dir }}/wildcard.lan.csr"
-wildcard_crt: "{{ certs_dir }}/wildcard.lan.crt"
+wildcard_key: "{{ certs_dir }}/wildcard.cyber.key"
+wildcard_csr: "{{ certs_dir }}/wildcard.cyber.csr"
+wildcard_crt: "{{ certs_dir }}/wildcard.cyber.crt"
 openssl_san_conf: "{{ certs_dir }}/san_wildcard.cnf"
 # Subject par défaut — personnalise si besoin
 ca_subject: "/C=FR/ST=Île-de-France/L=Paris/O=LocalCA/OU=IT/CN=Local Root CA"
-wildcard_subject: "/C=FR/ST=Île-de-France/L=Paris/O=local/OU=caddy/CN=*.lan"
+wildcard_subject: "/C=FR/ST=Île-de-France/L=Paris/O=local/OU=caddy/CN=*.cyber"
 # Durées
 ca_days: 3650    # 10 ans
 wildcard_days: 365

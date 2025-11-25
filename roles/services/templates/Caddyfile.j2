@@ -12,7 +12,7 @@
 }
 
 
-homepage.lan {
+homepage.cyber {
 
     log {
         output file /var/log/caddy/homepage.access.log {
@@ -23,7 +23,7 @@ homepage.lan {
         }
     }
 
-    tls /certs/wildcard.lan.crt /certs/wildcard.lan.key {
+    tls /certs/wildcard.cyber.crt /certs/wildcard.cyber.key {
         protocols tls1.3
     }
 
@@ -39,7 +39,7 @@ homepage.lan {
     reverse_proxy 172.20.0.10:3000
 }
 
-vpn.lan {
+vpn.cyber {
 
     log {
         output file /var/log/caddy/vpn.access.log {
@@ -59,7 +59,7 @@ vpn.lan {
         -Server
     }
 
-    tls /certs/wildcard.lan.crt /certs/wildcard.lan.key {
+    tls /certs/wildcard.cyber.crt /certs/wildcard.cyber.key {
         protocols tls1.3
     }
 
@@ -67,7 +67,7 @@ vpn.lan {
 
 }
 
-gogs.lan {
+gogs.cyber {
 
     log {
         output file /var/log/caddy/gogs.access.log {
@@ -87,7 +87,7 @@ gogs.lan {
         -Server
     }
 
-    tls /certs/wildcard.lan.crt /certs/wildcard.lan.key {
+    tls /certs/wildcard.cyber.crt /certs/wildcard.cyber.key {
         protocols tls1.3
     }
 
@@ -95,7 +95,7 @@ gogs.lan {
 
 }
 
-pihole.lan {
+pihole.cyber {
 
     log {
         output file /var/log/caddy/pihole.access.log {
@@ -115,7 +115,7 @@ pihole.lan {
         -Server
     }
 
-    tls /certs/wildcard.lan.crt /certs/wildcard.lan.key {
+    tls /certs/wildcard.cyber.crt /certs/wildcard.cyber.key {
         protocols tls1.3
     }
 
@@ -123,7 +123,7 @@ pihole.lan {
 
 }
 
-crl.lan {
+crl.cyber {
 
     log {
         output file /var/log/caddy/crl.access.log {
@@ -139,7 +139,7 @@ crl.lan {
 
 }
 
-ressources.lan {
+ressources.cyber {
 
     log {
         output file /var/log/caddy/crl.access.log {

@@ -1,7 +1,7 @@
 ---
 # vars file for docker
 # https://github.com/gogs/gogs/blob/main/templates/install.tmpl
-gogs_base_url: "https://gogs.lan"
+gogs_base_url: "https://gogs.cyber"
 
 gogs_install:
   # --- Base de données ---
@@ -12,15 +12,15 @@ gogs_install:
   app_name: "Gogs"
   repo_root_path: "/data/git/gogs-repositories"
   run_user: "git"
-  domain: "gogs.lan"
+  domain: "gogs.cyber"
   ssh_port: "22"
   http_port: "3000"
-  app_url: "https://gogs.lan/"
+  app_url: "https://gogs.cyber/"
 
   # --- SMTP (optionnel) ---
   smtp_host: "{{smtp_domain}}:{{smtp_port}}"
-  smtp_from: "Gogs <no-reply@gog.lan>"
-  smtp_email: "gog.lan"
+  smtp_from: "Gogs <no-reply@gog.cyber>"
+  smtp_email: "gog.cyber"
   smtp_passwd: "{{smtp_secret}}"
   register_confirm: true
   mail_notify: true
@@ -52,7 +52,7 @@ gogs_install:
 
 # [server]
 # ; The public-facing domain name for the application.
-# DOMAIN           = gogs.lan
+# DOMAIN           = gogs.cyber
 # ; The protocol that is used to serve direct traffic to the application.
 # ; Currently supports "http", "https", "fcgi" and "unix".
 # PROTOCOL         = http
@@ -60,7 +60,7 @@ gogs_install:
 # HTTP_ADDR        = 0.0.0.0
 # ; The port number to be listened by the application.
 # HTTP_PORT        = 3000
-# EXTERNAL_URL     = http://gogs.lan/
+# EXTERNAL_URL     = http://gogs.cyber/
 # DISABLE_SSH      = false
 # SSH_PORT         = 22
 # START_SSH_SERVER = false
@@ -86,7 +86,7 @@ gogs_install:
 # LOGIN = true
 # USER = {{smtp_user}}
 # PASSWD = {{smtp_secret}}
-# FROM = "Gogs" <gogs@gogs.lan>
+# FROM = "Gogs" <gogs@gogs.cyber>
 
 # [auth]
 # REQUIRE_EMAIL_CONFIRMATION  = false

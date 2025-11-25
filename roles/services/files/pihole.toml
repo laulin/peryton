@@ -69,7 +69,7 @@
   #       hostname.
   #   - "PI.HOLE"
   #       Respond with "pi.hole".
-  piholePTR = "pihole.lan"
+  piholePTR = "pihole.cyber"
 
   # How should FTL handle queries when the gravity database is not available?
   #
@@ -101,8 +101,8 @@
   # Possible values are:
   #     Array of custom DNS records each one in HOSTS form: "IP HOSTNAME"
   hosts = [
-    "172.19.0.20 caddy.lan",
-    "172.19.0.40 git.lan"
+    "172.19.0.20 caddy.cyber",
+    "172.19.0.40 git.cyber"
   ]
 
   # If set, A and AAAA queries for plain names, without dots or domain parts, are never
@@ -204,12 +204,12 @@
   # Possible values are:
   #     Array of CNAMEs each on in one of the following forms: "<cname>,<target>[,<TTL>]"
   cnameRecords = [
-    "vpn.lan,caddy.lan",
-    "gogs.lan,caddy.lan",
-    "homepage.lan,caddy.lan",
-    "pihole.lan,caddy.lan",
-    "crl.lan,caddy.lan",
-    "ressources.lan,caddy.lan"
+    "vpn.cyber,caddy.cyber",
+    "gogs.cyber,caddy.cyber",
+    "homepage.cyber,caddy.cyber",
+    "pihole.cyber,caddy.cyber",
+    "crl.cyber,caddy.cyber",
+    "ressources.cyber,caddy.cyber"
   ]
 
   # Port used by the DNS server

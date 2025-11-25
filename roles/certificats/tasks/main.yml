@@ -69,13 +69,13 @@
       L = Paris
       O = local
       OU = caddy
-      CN = *.lan
+      CN = *.cyber
 
       [v3_req]
       subjectAltName = @alt_names
 
       [alt_names]
-      DNS.1 = *.lan
+      DNS.1 = *.cyber
       DNS.2 = lan
 
 - name: Check if wildcard cert exists
@@ -90,7 +90,7 @@
     creates: "{{ wildcard_key }}"
   when: not wildcard_crt_stat.stat.exists
 
-- name: Generate CSR for wildcard (*.lan)
+- name: Generate CSR for wildcard (*.cyber)
   command: >
     openssl req -new
       -key "{{ wildcard_key }}"
