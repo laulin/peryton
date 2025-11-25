@@ -7,3 +7,4 @@ fail2ban_maxretry: 1          # Max retry attempts
 fail2ban_logpath: /server/caddy/logs/access.log  # Path to Caddy's access log
 fail2ban_filter_name: caddy-json  # Name of the custom filter
 fail2ban_jail_name: caddy-json    # Name of the jail
+ignoreip: 192.168.0.0/24
