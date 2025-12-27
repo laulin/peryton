@@ -15,7 +15,7 @@ services:
     volumes:
         - '/server/wg-easy:/etc/wireguard'
     environment:
-        - PASSWORD_HASH=$$2a$$12$$axqdo7sfhujrDpoJwz0yqOYHWdG.vFqm9deRb1F.K5xFu8K0XLqmq
+        - PASSWORD_HASH="{{ vpn_password | password_hash('sha512') }}"
         - WG_HOST={{public_ip}}
         - WG_DEFAULT_DNS=172.19.0.10
         - LANG=fr
