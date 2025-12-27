@@ -1,0 +1,13 @@
+---
+- name: Add mappings to /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      127.0.0.1 gogs.cyber
+      127.0.0.1 homepage.cyber
+      127.0.0.1 vpn.cyber
+      127.0.0.1 pihole.cyber
+      127.0.0.1 crl.cyber
+      127.0.0.1 ressources.cyber
+      127.0.0.1 caddy.cyber
+    marker: "# {mark} ANSIBLE MANAGED BLOCK LOCAL FQDNS"
