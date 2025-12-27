@@ -1,0 +1,32 @@
+---
+## All theses variables must be present in host_vars files
+# gogs_users:
+#   - name: "alice"
+#     email: "alice@example.com"
+#     password: "password123"
+#   - name: "bob"
+#     email: "bob@example.com"
+#     password: "password456"
+
+# gogs_url: "http://localhost:10880"
+# gogs_admin_user: "toto"
+# gogs_admin_pass: "titi"
+# gogs_admin_email: "toto@example.com"
+
+# # SMTP Settings
+# gogs_smtp_host: ""
+# gogs_smtp_from: ""
+# gogs_smtp_user: ""
+# gogs_smtp_passwd: ""
+
+# # Server and Service Settings
+# gogs_offline_mode: false
+# gogs_disable_gravatar: false
+# gogs_enable_federated_avatar: false
+# gogs_disable_registration: true
+# gogs_enable_captcha: true
+# gogs_require_sign_in_view: false
+
+# # Email Services
+# gogs_enable_register_confirmation: false
+# gogs_enable_notify_mail: false

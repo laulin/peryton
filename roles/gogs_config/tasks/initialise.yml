@@ -1,0 +1,88 @@
+---
+- name: Check Gogs reachability
+  uri:
+    url: "{{ gogs_url }}"
+    status_code: [200, 302]
+    return_content: no
+    validate_certs: no
+  register: gogs_check
+  until: gogs_check.status in [200, 302]
+  retries: 10
+  delay: 2
+
+- name: Check if Gogs is already installed (check redirect)
+  uri:
+    url: "{{ gogs_url }}"
+    method: GET
+    follow_redirects: no
+    status_code: [200, 302]
+    validate_certs: no
+  register: gogs_root
+
+- name: Install Gogs
+  when: gogs_root.status == 302 and '/install' in gogs_root.location
+  block:
+    - name: Fetch install page for CSRF token
+      uri:
+        url: "{{ gogs_url }}/install"
+        method: GET
+        return_content: yes
+        validate_certs: no
+      register: install_page
+
+    - name: Extract CSRF token
+      set_fact:
+        gogs_csrf_token: "{{ install_page.content | regex_search('name=\"_csrf\" content=\"([^\"]+)\"', '\\1') | first }}"
+
+    - name: Fail if CSRF token not found
+      fail:
+        msg: "Could not extract CSRF token from install page"
+      when: gogs_csrf_token is not defined or gogs_csrf_token == ""
+
+    - name: Submit installation form
+      uri:
+        url: "{{ gogs_url }}/install"
+        method: POST
+        validate_certs: no
+        body_format: form-urlencoded
+        body:
+          _csrf: "{{ gogs_csrf_token }}"
+          db_type: "SQLite3"
+          db_path: "/app/gogs/data/gogs.db"
+          admin_name: "{{ gogs_admin_user }}"
+          admin_passwd: "{{ gogs_admin_pass }}"
+          admin_confirm_passwd: "{{ gogs_admin_pass }}"
+          admin_email: "{{ gogs_admin_email }}"
+          app_name: "Gogs"
+          repo_root_path: "/data/git/gogs-repositories"
+          run_user: "git"
+          domain: "{{ tld }}"
+          ssh_port: "22"
+          http_port: "3000"
+          app_url: "https://gogs.{{tld}}/"
+          log_root_path: "/app/gogs/log"
+          default_branch: "master"
+          
+          # SMTP Settings
+          smtp_host: "{{ gogs_smtp_host }}"
+          smtp_from: "{{ gogs_smtp_from }}"
+          smtp_user: "{{ gogs_smtp_user }}"
+          smtp_passwd: "{{ gogs_smtp_passwd }}"
+          
+          # Server and Service Settings
+          offline_mode: "{{ 'on' if gogs_offline_mode else omit }}"
+          disable_gravatar: "{{ 'on' if gogs_disable_gravatar else omit }}"
+          enable_federated_avatar: "{{ 'on' if gogs_enable_federated_avatar else omit }}"
+          disable_registration: "{{ 'on' if gogs_disable_registration else omit }}"
+          enable_captcha: "{{ 'on' if gogs_enable_captcha else omit }}"
+          require_sign_in_view: "{{ 'on' if gogs_require_sign_in_view else omit }}"
+          
+          # Email Services
+          enable_register_confirmation: "{{ 'on' if gogs_enable_register_confirmation else omit }}"
+          enable_notify_mail: "{{ 'on' if gogs_enable_notify_mail else omit }}"
+          
+          enable_login_status_persistence: "on"
+        status_code: [200, 302]
+        follow_redirects: yes
+        headers:
+          Cookie: "{{ install_page.cookies_string }}"

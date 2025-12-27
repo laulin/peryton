@@ -1,0 +1,26 @@
+---
+- name: "Check if user {{ user.name }} exists"
+  uri:
+    url: "{{ gogs_url }}/api/v1/users/{{ user.name }}"
+    method: GET
+    status_code: [200, 404]
+    return_content: yes
+    validate_certs: no
+  register: user_check
+
+- name: "Create user {{ user.name }}"
+  uri:
+    url: "{{ gogs_url }}/api/v1/admin/users"
+    method: POST
+    user: "{{ gogs_admin_user }}"
+    password: "{{ gogs_admin_pass }}"
+    force_basic_auth: yes
+    body_format: json
+    body:
+      login_name: "{{ user.name }}"
+      username: "{{ user.name }}"
+      email: "{{ user.email }}"
+      password: "{{ user.password }}"
+    status_code: 201
+    validate_certs: no
+  when: user_check.status == 404

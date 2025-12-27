@@ -1,0 +1,9 @@
+---
+- name: Initialise Gogs
+  include_tasks: initialise.yml
+
+- name: Create users
+  include_tasks: create_user.yml
+  loop: "{{ gogs_users | default([]) }}"
+  loop_control:
+    loop_var: user
