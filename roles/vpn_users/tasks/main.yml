@@ -1,0 +1,39 @@
+---
+- name: Login to get session
+  uri:
+    url: "https://vpn.cyber/api/session"
+    method: POST
+    body_format: json
+    body:
+      password: "{{ vpn_password }}"
+    status_code: [200, 204]
+    validate_certs: no
+  register: login_response
+
+- name: Get existing clients
+  uri:
+    url: "https://vpn.cyber/api/wireguard/client"
+    method: GET
+    headers:
+      Cookie: "{{ login_response.cookies_string }}"
+    status_code: 200
+    validate_certs: no
+  register: existing_clients_response
+
+- name: Set facts for existing clients
+  set_fact:
+    existing_client_names: "{{ existing_clients_response.json | map(attribute='name') | list }}"
+
+- name: Create VPN user if not exists
+  uri:
+    url: "https://vpn.cyber/api/wireguard/client"
+    method: POST
+    headers:
+      Cookie: "{{ login_response.cookies_string }}"
+    body_format: json
+    body:
+      name: "{{ item.name }}"
+    status_code: 200
+    validate_certs: no
+  loop: "{{ gogs_users | default([]) }}"
+  when: item.name not in existing_client_names

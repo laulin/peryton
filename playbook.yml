@@ -9,8 +9,10 @@
       tags : [services]
     - role : etc_hosts
       tags : [etc_hosts]
-    # - role : gogs_config
-    #   tags : [services,gogs]
+    - role : gogs_config
+      tags : [services,gogs]
+    - role : vpn_users
+      tags : [services,vpn_users]
     - role : ufw
       tags : [ufw, fail2ban]
     - role : fail2ban
