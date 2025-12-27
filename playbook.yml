@@ -6,7 +6,7 @@
     - role : certificats
       tags : [services, certificats]
     - role : services
-      tags : [services]
+      tags : [services,stack]
     - role : etc_hosts
       tags : [etc_hosts]
     - role : gogs_config
