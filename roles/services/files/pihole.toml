@@ -209,7 +209,8 @@
     "homepage.cyber,caddy.cyber",
     "pihole.cyber,caddy.cyber",
     "crl.cyber,caddy.cyber",
-    "ressources.cyber,caddy.cyber"
+    "ressources.cyber,caddy.cyber",
+    "doc.cyber,caddy.cyber"
   ]
 
   # Port used by the DNS server

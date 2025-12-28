@@ -61,3 +61,8 @@ directories:
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+
+  - path: /server/docsify
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'

@@ -10,4 +10,5 @@
       127.0.0.1 crl.cyber
       127.0.0.1 ressources.cyber
       127.0.0.1 caddy.cyber
+      127.0.0.1 doc.cyber
     marker: "# {mark} ANSIBLE MANAGED BLOCK LOCAL FQDNS"

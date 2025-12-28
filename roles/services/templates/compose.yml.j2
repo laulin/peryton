@@ -88,6 +88,16 @@ services:
       front_net:
         ipv4_address: 172.19.0.10
 
+  docsify:
+    image: ghcr.io/rockbenben/docsify-server:latest
+    container_name: docsify
+    restart: unless-stopped
+    volumes:
+      - /server/docsify:/docs
+    networks:
+      back_net:
+        ipv4_address: 172.20.0.50
+
 
 networks:
   front_net:

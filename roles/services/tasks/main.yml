@@ -65,6 +65,25 @@
     group: "{{user}}"
     mode: '0644'
 
+
+- name: Docsify index.html
+  copy:
+    src: index.html
+    dest: /server/docsify/index.html
+    force: no
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0644'
+
+- name: Docsify README.md
+  copy:
+    src: README.md
+    dest: /server/docsify/README.md
+    force: no
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0644'
+
 # gogs configuration is done in gogs role
 
 - name: pihole configuration file
