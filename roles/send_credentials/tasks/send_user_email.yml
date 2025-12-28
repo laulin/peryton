@@ -24,28 +24,28 @@
     password: "{{ gogs_smtp_passwd }}"
     from: "{{ gogs_smtp_from }}"
     to: "{{ item.email }}"
-    subject: "Vos identifiants Peryton et Configuration VPN"
+    subject: "Your Peryton Credentials and VPN Configuration"
     body: |
-      Bonjour {{ item.name }},
+      Hello {{ item.name }},
 
-      Si vous recevez ce mail, c'est que vous avez été ajouté à la plateforme Peryton. Pour vous y connecter, vous devez d'abord installer WireGuard sur votre ordinateur, et utiliser le fichier de configuration que vous trouverez ci-joint.
+      If you are receiving this email, it means you have been added to the Peryton platform. To connect, you must first install WireGuard on your computer and use the configuration file attached to this email.
 
-      Pour installer WireGuard sur une Debian, vous devez utiliser la commande "sudo apt install wireguard" et placer votre configuration dans /etc/wireguard/wg0.conf. Après, on monter et descendre le tunnel, utiliser les commandes wg-quick up wg0 et wg-quick down wg0, respectivement. 
+      To install WireGuard on Debian, use the command "sudo apt install wireguard" and place your configuration in /etc/wireguard/wg0.conf. You can then use the commands 'wg-quick up wg0' and 'wg-quick down wg0' to bring the tunnel up and down, respectively. 
       
-      Une fois le tunnel établi, vous pouvez accéder facilement aux différents services via la page https://homepage.cyber.
+      Once the tunnel is established, you can easily access the various services via https://homepage.cyber.
 
-      Pour rappel, l'ensemble des cours, des TPs et des **évaluations** seront à réaliser sous linux (VM, machine physique ou WSL). Vous devez disposer d'un environnement Linux **avant** de commencer les cours.
+      As a kind reminder, all courses, labs, and **evaluations** must be performed on Linux (VM, physical machine, or WSL). You must have a Linux environment ready **before** starting the courses.
 
-      Concernant Gogs (serveur git), vos identifiants personnels sont les suivants:
+      Regarding Gogs (git server), your personal credentials are as follows:
       
-      URL : {{ gogs_url }}
-      Utilisateur : {{ item.name }}
-      Mot de passe : {{ item.password }}
+      URL: {{ gogs_url }}
+      Username: {{ item.name }}
+      Password: {{ item.password }}
 
-      Sur la homepage, vous trouverez aussi des ressources externes utiles pour votre TP et approfondir votre compréhension de la cybersécurité.
+      On the homepage, you will also find useful external resources for your lab and to deepen your understanding of cybersecurity.
 
-      Cordialement,
-      L'admin
+      Best regards,
+      The Admin
     attach:
       - "/tmp/{{ item.name }}.conf"
     secure: starttls
