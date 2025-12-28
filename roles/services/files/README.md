@@ -105,6 +105,48 @@ git clone git@gogs.cyber:user/repo.git
 
 ---
 
+## PKI & Certificate Authority
+
+To ensure secure communication (HTTPS), the Peryton platform uses an internal **Public Key Infrastructure (PKI)**.
+
+### What is a PKI?
+PKI is a system of processes, technologies, and policies that allows you to encrypt and sign data. At its core is the **Certificate Authority (CA)**, a trusted entity that issues digital certificates.
+When you visit a website like `https://google.com`, your browser trusts it because Google's certificate was signed by a CA already trusted by your operating system.
+
+### Why do I see "Not Secure"?
+Since Peryton uses its own private CA (not a public one like Let's Encrypt), your computer doesn't know it should trust it. This results in security warnings when accessing services like `https://gogs.cyber` or `https://homepage.cyber`.
+
+### How to Trust the Platform
+To fix this, you need to install the Peryton Root CA certificate into your computer's trust store.
+
+1.  **Download the Certificate**:
+    -   Go to [http://crl.cyber](http://crl.cyber).
+    -   Look for the Root CA file (usually named `root_ca.crt`, `ca.pem`, or similar).
+    -   Download it to your machine.
+
+2.  **Install Certificate**:
+
+    -   **Windows**:
+        1.  Double-click the downloaded file.
+        2.  Click **Install Certificate**.
+        3.  Select **Local Machine** (requires authorization).
+        4.  **Crucial Step**: Choose **"Place all certificates in the following store"** and select **"Trusted Root Certification Authorities"**.
+        5.  Finish the wizard.
+
+    -   **Linux (Ubuntu/Debian)**:
+        1.  Copy the file to `/usr/local/share/ca-certificates/peryton.crt`.
+        2.  Run `sudo update-ca-certificates`.
+
+    -   **macOS**:
+        1.  Double-click the certificate to open Keychain Access.
+        2.  Add it to the **System** keychain.
+        3.  Double-click the added certificate, expand **Trust**, and set **"When using this certificate"** to **Assign Trust**.
+
+3.  **Verify**:
+    Restart your browser and visit [https://homepage.cyber](https://homepage.cyber). The "Not Secure" warning should be gone, and you should see a secure lock icon.
+
+---
+
 ## AI Usage & Ethics
 
 Artificial Intelligence (AI) tools (like ChatGPT, Claude, Copilot) are powerful assistants for engineers.
