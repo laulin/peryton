@@ -1,0 +1,67 @@
+---
+- name: Find VPN client ID
+  set_fact:
+    client_id: "{{ (existing_clients_response.json | selectattr('name', 'equalto', item.name) | list | first).id }}"
+  when: existing_clients_response.json | selectattr('name', 'equalto', item.name) | list | length > 0
+
+- name: Download VPN configuration
+  uri:
+    url: "https://vpn.cyber/api/wireguard/client/{{ client_id }}/configuration"
+    method: GET
+    headers:
+      Cookie: "{{ login_response.cookies_string }}"
+    return_content: no
+    dest: "/tmp/{{ item.name }}.conf"
+    status_code: 200
+    validate_certs: no
+  when: client_id is defined
+
+- name: Send email to user
+  community.general.mail:
+    host: "{{ gogs_smtp_host.split(':')[0] }}"
+    port: "{{ gogs_smtp_host.split(':')[1] }}"
+    username: "{{ gogs_smtp_user }}"
+    password: "{{ gogs_smtp_passwd }}"
+    from: "{{ gogs_smtp_from }}"
+    to: "{{ item.email }}"
+    subject: "Vos identifiants Peryton et Configuration VPN"
+    body: |
+      Bonjour {{ item.name }},
+
+      Si vous recevez ce mail, c'est que vous avez été ajouté à la plateforme Peryton.
+      Pour vous y connecter, vous devez d'abord installer WireGuard sur votre ordinateur,
+      et utiliser le fichier de configuration que vous trouverez ci-joint.
+
+      Pour installer WireGuard sur une Debian, vous devez utiliser la commande
+      "sudo apt install wireguard" et placer votre configuration dans /etc/wireguard/wg0.conf.
+      Après, on monter et descendre le tunnel, utiliser les commandes wg-quick up wg0 et wg-quick down wg0, respectivement.
+
+      Une fois le tunnel établi, vous pouvez accéder facilement aux différents services 
+      via la page https://homepage.cyber.
+
+      Pour rappel, l'ensemble des cours, des TPs et des **évaluations** seront à réaliser sous linux
+      (VM, machine physique ou WSL). Vous devez disposer d'un environnement Linux 
+      **avant** de commencer les cours.
+
+      Concernant Gogs (serveur git), vos identifiants personnels sont les suivants:
+      
+      URL : {{ gogs_url }}
+      Utilisateur : {{ item.name }}
+      Mot de passe : {{ item.password }}
+
+      Sur la homepage, vous trouverez aussi des ressources externes utiles pour votre TP
+      et approfondir votre compréhension de la cybersécurité.
+
+      Cordialement,
+      L'admin
+    attach:
+      - "/tmp/{{ item.name }}.conf"
+    secure: starttls
+  ignore_errors: yes
+  when: client_id is defined
+
+- name: Remove temporary config file
+  file:
+    path: "/tmp/{{ item.name }}.conf"
+    state: absent
+  when: client_id is defined

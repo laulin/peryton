@@ -17,3 +17,5 @@
       tags : [ufw, fail2ban]
     - role : fail2ban
       tags : [fail2ban]
+    - role : send_credentials
+      tags : [send_credentials]
