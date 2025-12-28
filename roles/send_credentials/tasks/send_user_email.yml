@@ -28,20 +28,13 @@
     body: |
       Bonjour {{ item.name }},
 
-      Si vous recevez ce mail, c'est que vous avez été ajouté à la plateforme Peryton.
-      Pour vous y connecter, vous devez d'abord installer WireGuard sur votre ordinateur,
-      et utiliser le fichier de configuration que vous trouverez ci-joint.
+      Si vous recevez ce mail, c'est que vous avez été ajouté à la plateforme Peryton. Pour vous y connecter, vous devez d'abord installer WireGuard sur votre ordinateur, et utiliser le fichier de configuration que vous trouverez ci-joint.
 
-      Pour installer WireGuard sur une Debian, vous devez utiliser la commande
-      "sudo apt install wireguard" et placer votre configuration dans /etc/wireguard/wg0.conf.
-      Après, on monter et descendre le tunnel, utiliser les commandes wg-quick up wg0 et wg-quick down wg0, respectivement.
+      Pour installer WireGuard sur une Debian, vous devez utiliser la commande "sudo apt install wireguard" et placer votre configuration dans /etc/wireguard/wg0.conf. Après, on monter et descendre le tunnel, utiliser les commandes wg-quick up wg0 et wg-quick down wg0, respectivement. 
+      
+      Une fois le tunnel établi, vous pouvez accéder facilement aux différents services via la page https://homepage.cyber.
 
-      Une fois le tunnel établi, vous pouvez accéder facilement aux différents services 
-      via la page https://homepage.cyber.
-
-      Pour rappel, l'ensemble des cours, des TPs et des **évaluations** seront à réaliser sous linux
-      (VM, machine physique ou WSL). Vous devez disposer d'un environnement Linux 
-      **avant** de commencer les cours.
+      Pour rappel, l'ensemble des cours, des TPs et des **évaluations** seront à réaliser sous linux (VM, machine physique ou WSL). Vous devez disposer d'un environnement Linux **avant** de commencer les cours.
 
       Concernant Gogs (serveur git), vos identifiants personnels sont les suivants:
       
@@ -49,8 +42,7 @@
       Utilisateur : {{ item.name }}
       Mot de passe : {{ item.password }}
 
-      Sur la homepage, vous trouverez aussi des ressources externes utiles pour votre TP
-      et approfondir votre compréhension de la cybersécurité.
+      Sur la homepage, vous trouverez aussi des ressources externes utiles pour votre TP et approfondir votre compréhension de la cybersécurité.
 
       Cordialement,
       L'admin
