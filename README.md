@@ -4,8 +4,8 @@
 
 Peryton is a complete "Infra-as-Code" (IaC) infrastructure designed to provide a secure, isolated, and automated learning environment for cybersecurity students.
 
-![Cybersecurity Education](https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80)
-*(Note: Illustrative image)*
+![Cybersecurity Education](images/peryton.png)
+
 
 ## 🎯 Motivation
 
@@ -70,12 +70,13 @@ graph TD
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-org/peryton.git
+    git clone https://github.com/laulin/peryton.git
     cd peryton
     ```
 
 2.  **Configure inventory:**
-    Edit the `hosts` file to add your server's IP address.
+    *   Edit the `hosts` file to add your server's IP address.
+    *   Create or edit the variable file in `host_vars/your-domain.yml` to set up all necessary variables (passwords, domains, etc.).
 
 3.  **Run deployment:**
     Execute the Ansible playbook to install dependencies, configure security, and launch containers.
