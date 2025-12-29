@@ -60,7 +60,7 @@ graph TD
     end
 
     subgraph "External World"
-        External[External Resources\n(RootMe, TryHackMe...)]
+        External["External Resources<br/>(RootMe, TryHackMe...)"]
     end
 
     %% Dashboard Links
