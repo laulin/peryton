@@ -33,6 +33,13 @@
     group: "{{user}}"
     mode: '0644'
 
+- name: Clone fast-qcm
+  git:
+    repo: 'https://github.com/laulin/fast-qcm.git'
+    dest: /server/fqcm
+    version: main
+    force: yes
+
 - name: homepage image
   ansible.builtin.copy:
     src: peryton.png
@@ -98,8 +105,9 @@
   shell: docker compose pull
   args:
     chdir: /server
+  ignore_errors: yes
 
 - name: Start compose
-  shell: docker compose up -d
+  shell: docker compose up -d --build
   args:
     chdir: /server

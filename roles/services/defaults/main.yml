@@ -58,6 +58,14 @@ directories:
     owner: "{{user}}"
     group: "{{user}}"
     mode: '0755'
+  - path: /server/fqcm
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
+  - path: /server/fqcm/output
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: '0755'
   - path: /server/ressources/courses
     owner: "{{user}}"
     group: "{{user}}"

@@ -98,6 +98,19 @@ services:
       back_net:
         ipv4_address: 172.20.0.50
 
+  qcm:
+    build: /server/fqcm
+    container_name: qcm
+    image: qcm
+    restart: unless-stopped
+    command: "python3 -m fqcm -q {{qcm.surveyfile}} -i 0.0.0.0 -p 8888 -n {{qcm.number_of_questions}} --password {{qcm.password}} -o /output"
+    volumes:
+       - /server/fqcm/survey.json:/fqcm/survey.json:ro
+       - /server/fqcm/output:/output
+    networks:
+      back_net:
+        ipv4_address: 172.20.0.60
+
 
 networks:
   front_net:

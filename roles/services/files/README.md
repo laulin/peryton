@@ -6,6 +6,7 @@ Welcome to the **Peryton** platform documentation. This guide will help you get 
 - [Git Basics](#git-basics)
 - [SSH Keys](#ssh-keys)
 - [Gogs](#gogs-tutorial)
+- [PKI & Certificate Authority](#pki--certificate-authority)
 - [AI Usage & Ethics](#ai-usage--ethics)
 
 ---
