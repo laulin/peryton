@@ -101,7 +101,6 @@ services:
   qcm:
     build: /server/fqcm
     container_name: qcm
-    image: qcm
     restart: unless-stopped
     command: "python3 -m fqcm -q {{qcm.surveyfile}} -i 0.0.0.0 -p 8888 -n {{qcm.number_of_questions}} --password {{qcm.password}} -o /output"
     volumes:

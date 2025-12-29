@@ -102,10 +102,9 @@
 
 
 - name: Update images
-  shell: docker compose pull
+  shell: docker compose pull --ignore-buildable
   args:
     chdir: /server
-  ignore_errors: yes
 
 - name: Start compose
   shell: docker compose up -d --build
