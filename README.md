@@ -29,11 +29,12 @@ The infrastructure deploys and orchestrates the following services via Docker:
 
 | Service | Description | Access (Internal) |
 | :--- | :--- | :--- |
-| **Homepage** | Centralized dashboard for accessing all tools. | `http://home.cyber` |
-| **Gogs** | Self-hosted Git server for code versioning and project submission. | `http://git.cyber` |
-| **Docsify** | Technical documentation platform for courses and labs. | `http://doc.cyber` |
-| **Fast-QCM** | Automated assessment and quiz system. | `http://qcm.cyber` |
+| **Homepage** | Centralized dashboard for accessing all tools. | `https://homepage.cyber` |
+| **Gogs** | Self-hosted Git server for code versioning and project submission. | `https://gogs.cyber` |
+| **Docsify** | Technical documentation platform for courses and labs. | `https://doc.cyber` |
+| **Fast-QCM** | Automated assessment and quiz system. | `https://qcm.cyber` |
 | **WireGuard** | VPN server with web management interface (wg-easy). | `https://vpn.cyber` |
+| **PKI/CRL** | Root CA download and Certificate Revocation List. | `http://crl.cyber` |
 | **Pi-hole** | DNS server and ad blocker for internal name resolution (`.cyber`). | N/A |
 | **Caddy** | Reverse proxy handling routing and TLS termination. | N/A |
 
