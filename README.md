@@ -1,16 +1,90 @@
-# peryton
+# Peryton 🛡️
 
-Self hosts service
+**Cybersecurity Education and Simulation Platform**
 
-# what is deployed ?
+Peryton is a complete "Infra-as-Code" (IaC) infrastructure designed to provide a secure, isolated, and automated learning environment for cybersecurity students.
 
-- wireguard + wg-easy : create a vpn to control the environment access
-- dnsmask : manage the DNS and allow to use a blacklist
-- caddy : reverse prody to services
-- gogs : git repository
-- fast-QCM : a QCM server to manage student evaluation
+![Cybersecurity Education](https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80)
+*(Note: Illustrative image)*
 
+## 🎯 Motivation
 
-# deploy 
+Peryton was created to address a critical need in cybersecurity education: providing a unified platform that allows students to practice in an environment that is:
+*   **Dedicated**: Each instance is autonomous and isolated.
+*   **Secure**: Resource access is strictly controlled via VPN.
+*   **Automated**: Rapid deployment and simplified access management (automated credential emailing).
 
-ansible-playbook -u user -i hosts playbook.yml 
+## ✨ Key Features
+
+*   **Secure VPN Access**: Native WireGuard integration for encrypted access to internal services.
+*   **Partitioned Infrastructure**: Strict network segmentation between front-end services (exposed to VPN) and back-end services (isolated), mimicking real-world enterprise architecture.
+*   **Advanced Automation**:
+    *   **Ansible Deployment**: Full configuration of servers, firewalls (UFW), and containers via playbooks.
+    *   **Student Onboarding**: Automated generation and emailing of VPN configurations and personal credentials.
+*   **Integrated Tool Suite**: A complete ecosystem for development, documentation, and assessment.
+
+## 🛠️ Included Services
+
+The infrastructure deploys and orchestrates the following services via Docker:
+
+| Service | Description | Access (Internal) |
+| :--- | :--- | :--- |
+| **Homepage** | Centralized dashboard for accessing all tools. | `http://home.cyber` |
+| **Gogs** | Self-hosted Git server for code versioning and project submission. | `http://git.cyber` |
+| **Docsify** | Technical documentation platform for courses and labs. | `http://doc.cyber` |
+| **Fast-QCM** | Automated assessment and quiz system. | `http://qcm.cyber` |
+| **WireGuard** | VPN server with web management interface (wg-easy). | `https://vpn.cyber` |
+| **Pi-hole** | DNS server and ad blocker for internal name resolution (`.cyber`). | N/A |
+| **Caddy** | Reverse proxy handling routing and TLS termination. | N/A |
+
+## 🏗️ Architecture
+
+The diagram below illustrates the platform's network architecture, highlighting the separation between the Front Net and the internal Back Net.
+
+```mermaid
+graph TD
+    User((Student)) -->|WireGuard VPN| VPN[VPN Container]
+    VPN -->|Front Net| Caddy[Caddy Reverse Proxy]
+    VPN -->|Front Net| Pihole[Pi-hole DNS]
+    
+    subgraph "Docker Infrastructure"
+        Caddy -->|Back Net| Homepage
+        Caddy -->|Back Net| Gogs
+        Caddy -->|Back Net| Docsify
+        Caddy -->|Back Net| FastQCM
+    end
+    
+    style User fill:#f9f,stroke:#333,stroke-width:2px
+    style VPN fill:#bbf,stroke:#333,stroke-width:2px
+    style Caddy fill:#bfb,stroke:#333,stroke-width:2px
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+*   A Linux server (Ubuntu/Debian recommended).
+*   Ansible installed on the control machine.
+*   Root or sudo access on the target server.
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-org/peryton.git
+    cd peryton
+    ```
+
+2.  **Configure inventory:**
+    Edit the `hosts` file to add your server's IP address.
+
+3.  **Run deployment:**
+    Execute the Ansible playbook to install dependencies, configure security, and launch containers.
+    ```bash
+    ansible-playbook -i hosts playbook.yml
+    ```
+
+4.  **Distribute credentials:**
+    Use the `send_credentials` role to automatically email VPN configurations to students.
+
+---
+*Designed with ❤️ by Laulin for training future security experts, with the support of Spartan conseil*
