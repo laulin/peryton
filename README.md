@@ -53,11 +53,30 @@ graph TD
         Caddy -->|Back Net| Gogs
         Caddy -->|Back Net| Docsify
         Caddy -->|Back Net| FastQCM
+        
+        %% Static services served by Caddy
+        Caddy -->|Back Net| CRL[PKI/CRL]
+        Caddy -->|Back Net| Ressources[Course Resources]
     end
+
+    subgraph "External World"
+        External[External Resources\n(RootMe, TryHackMe...)]
+    end
+
+    %% Dashboard Links
+    Homepage -.->|Link| Gogs
+    Homepage -.->|Link| Docsify
+    Homepage -.->|Link| FastQCM
+    Homepage -.->|Link| CRL
+    Homepage -.->|Link| Ressources
+    Homepage -.->|Link| VPN
+    Homepage -.->|Link| Pihole
+    Homepage -.->|Link| External
     
     style User fill:#f9f,stroke:#333,stroke-width:2px
     style VPN fill:#bbf,stroke:#333,stroke-width:2px
     style Caddy fill:#bfb,stroke:#333,stroke-width:2px
+    style Homepage fill:#ff9,stroke:#333,stroke-width:2px
 ```
 
 ## 🚀 Quick Start
