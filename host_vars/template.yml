@@ -1,0 +1,88 @@
+---
+# ==========================================
+# Host Specific Configuration
+# ==========================================
+
+# ------------------------------------------
+# 1. System Configuration
+# ------------------------------------------
+# System user who will own the deployed files
+user: "debian"
+
+# ------------------------------------------
+# 2. VPN Configuration (Critical)
+# ------------------------------------------
+# Admin password for Wireguard web interface (wg-easy) and API
+# This password is used to create new VPN accesses.
+vpn_password: "CHANGEME_VERY_SECURE_PASSWORD"
+
+# ------------------------------------------
+# 3. User Management
+# ------------------------------------------
+# List of users for whom to create:
+# - A Gogs account
+# - A Wireguard VPN profile
+# - Send a summary email
+gogs_users:
+  - name: "student1"
+    email: "student1@school.edu"
+    password: "password_student1"
+    
+  - name: "student2"
+    email: "student2@school.edu"
+    password: "password_student2"
+
+# ------------------------------------------
+# 4. Gogs Configuration (Detailed)
+# ------------------------------------------
+# Admin account
+gogs_admin_user: "admin"
+gogs_admin_pass: "SecureAdminPassword"
+gogs_admin_email: "admin@example.com"
+
+# URL Configuration
+# gogs_url: "http://localhost:10880"
+
+# SMTP Settings (Required for sending emails if enabled)
+# gogs_smtp_host: "smtp.example.com"
+# gogs_smtp_from: "gogs@example.com"
+# gogs_smtp_user: "smtp_user"
+# gogs_smtp_passwd: "smtp_password"
+
+# Server Settings
+# gogs_offline_mode: false
+# gogs_disable_gravatar: false
+# gogs_enable_federated_avatar: false
+# gogs_disable_registration: true
+# gogs_enable_captcha: true
+# gogs_require_sign_in_view: false
+
+# Email Service Settings
+# gogs_enable_register_confirmation: false
+# gogs_enable_notify_mail: false
+
+# ------------------------------------------
+# 5. Fail2Ban Configuration
+# ------------------------------------------
+# fail2ban_bantime: 3600
+# fail2ban_findtime: 600
+# fail2ban_maxretry: 1
+# fail2ban_logpath: /server/caddy/logs/access.log
+# IP to ignore (e.g., your management IP)
+# ignoreip: 192.168.0.0/24
+
+# ------------------------------------------
+# 6. Certificates Configuration
+# ------------------------------------------
+# Directories (Default values usually suffice)
+# ca_dir: /server/pki/localca
+# crl_dir: /server/pki/crl
+# certs_dir: /server/pki/certs
+
+# Certificate Subjects
+# ca_subject: "/C=FR/ST=Île-de-France/L=Paris/O=LocalCA/OU=IT/CN=Local Root CA"
+# wildcard_subject: "/C=FR/ST=Île-de-France/L=Paris/O=local/OU=caddy/CN=*.cyber"
+
+# Validity Durations
+# ca_days: 3650
+# wildcard_days: 365

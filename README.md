@@ -107,5 +107,14 @@ graph TD
 4.  **Distribute credentials:**
     Use the `send_credentials` role to automatically email VPN configurations to students.
 
+## 📚 Documentation
+
+More detailed documentation is available in the `docs/` folder:
+
+*   [Architecture](docs/architecture.md): Detailed overview of the platform architecture and deployment flow.
+*   [Usage Guide](docs/usage.md): Comprehensive guide on how to configure and use the platform (French).
+*   [Roles & Variables](docs/roles.md): Reference for all Ansible roles and their configuration (French).
+
+
 ---
 *Designed with ❤️ by Laulin for training future security experts, with the support of Spartan conseil*
