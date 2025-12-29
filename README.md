@@ -112,8 +112,8 @@ graph TD
 More detailed documentation is available in the `docs/` folder:
 
 *   [Architecture](docs/architecture.md): Detailed overview of the platform architecture and deployment flow.
-*   [Usage Guide](docs/usage.md): Comprehensive guide on how to configure and use the platform (French).
-*   [Roles & Variables](docs/roles.md): Reference for all Ansible roles and their configuration (French).
+*   [Usage Guide](docs/usage.md): Comprehensive guide on how to configure and use the platform.
+*   [Roles & Variables](docs/roles.md): Reference for all Ansible roles and their configuration.
 
 
 ---
