@@ -1,7 +1,7 @@
 services:
   # https://belginux.com/installer-wireguard-easy-avec-docker/
   vpn:
-    image: ghcr.io/wg-easy/wg-easy
+    image: ghcr.io/wg-easy/wg-easy:15
     container_name: vpn
     restart: unless-stopped
     sysctls:
@@ -12,13 +12,20 @@ services:
         - NET_ADMIN
     ports:
         - '51820:51820/udp'
+        - '127.0.0.1:51821:51821/tcp'
     volumes:
         - '/server/wg-easy:/etc/wireguard'
     environment:
-        - PASSWORD_HASH={{ vpn_password_hashed }}
-        - WG_HOST={{public_ip}}
-        - WG_DEFAULT_DNS=172.19.0.10
-        - LANG=fr
+        INIT_ENABLED: "true"
+        INIT_USERNAME: "{{ wg_easy_admin_username }}"
+        INIT_PASSWORD: "{{ wg_easy_admin_password }}"
+        INIT_HOST: "{{ wg_easy_host }}"
+        INIT_PORT: "{{ wg_easy_port }}"
+        INIT_DNS: "172.19.0.10"
+        INIT_IPV4_CIDR: "{{ wg_easy_ipv4_cidr }}"
+        INIT_IPV6_CIDR: "{{ wg_easy_ipv6_cidr }}"
+        INIT_ALLOWED_IPS: "0.0.0.0/0"
+        LANG: fr
     networks:
       front_net:
         ipv4_address: 172.19.0.30
