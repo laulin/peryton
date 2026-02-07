@@ -1,6 +1,8 @@
 - hosts: peryton, local 
   become: true
   roles:
+    - role : system_update
+      tags : [system_update]
     - role : docker
       tags : [docker]
     - role : certificats

@@ -1,0 +1,7 @@
+---
+# handlers file for system_update
+
+- name: restart unattended-upgrades
+  systemd:
+    name: unattended-upgrades
+    state: restarted
