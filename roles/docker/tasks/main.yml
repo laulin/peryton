@@ -16,6 +16,7 @@
   shell: curl -fsSL https://get.docker.com | sh
   args:
     creates: /usr/bin/docker
+  notify: Reboot host
 
 - name: Install docker compose
   apt:
@@ -23,18 +24,10 @@
       - docker-compose
     state: present
     update_cache: yes
+  notify: Reboot host
 
 - name: Enable & start Docker service
   systemd:
     name: docker
     enabled: yes
     state: started
-
-- name: Reboot
-  ansible.builtin.reboot:
-    msg: "Reboot raised by ansible"
-    connect_timeout: 5      
-    reboot_timeout: 600     
-    pre_reboot_delay: 0     
-    post_reboot_delay: 10   
-    test_command: whoami    
