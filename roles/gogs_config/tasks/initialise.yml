@@ -56,10 +56,10 @@
           app_name: "Gogs"
           repo_root_path: "/data/git/gogs-repositories"
           run_user: "git"
-          domain: "{{ tld }}"
+          domain: "cyber"
           ssh_port: "22"
           http_port: "3000"
-          app_url: "https://gogs.{{tld}}/"
+          app_url: "https://gogs.cyber/"
           log_root_path: "/app/gogs/log"
           default_branch: "master"
           
