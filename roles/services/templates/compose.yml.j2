@@ -12,18 +12,16 @@ services:
         - NET_ADMIN
     ports:
         - '51820:51820/udp'
-        - '127.0.0.1:51821:51821/tcp'
     volumes:
         - '/server/wg-easy:/etc/wireguard'
     environment:
         INIT_ENABLED: "true"
-        INIT_USERNAME: "{{ wg_easy_admin_username }}"
-        INIT_PASSWORD: "{{ wg_easy_admin_password }}"
+        INIT_USERNAME: "admin"
+        INIT_PASSWORD: "{{ vpn_password }}"
         INIT_HOST: "{{ wg_easy_host }}"
         INIT_PORT: "{{ wg_easy_port }}"
         INIT_DNS: "172.19.0.10"
         INIT_IPV4_CIDR: "{{ wg_easy_ipv4_cidr }}"
-        INIT_IPV6_CIDR: "{{ wg_easy_ipv6_cidr }}"
         INIT_ALLOWED_IPS: "0.0.0.0/0"
         LANG: fr
     networks:
@@ -109,10 +107,10 @@ services:
     build: /server/fqcm
     container_name: qcm
     restart: unless-stopped
-    command: "python3 -m fqcm -q {{qcm.surveyfile}} -i 0.0.0.0 -p 8888 -n {{qcm.number_of_questions}} --password {{qcm.password}} -o /output"
+    command: "python3 -m fqcm -q /fqcm/survey.json -i 0.0.0.0 -p 8888 -n {{qcm.number_of_questions}} --password {{qcm.password}} -o /output"
     volumes:
        - /server/fqcm/survey.json:/fqcm/survey.json:ro
-       - /server/fqcm/output:/output
+       - /server/fqcm_output:/output
     networks:
       back_net:
         ipv4_address: 172.20.0.60
