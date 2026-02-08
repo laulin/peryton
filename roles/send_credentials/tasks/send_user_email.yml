@@ -6,7 +6,7 @@
 
 - name: Download VPN configuration
   uri:
-    url: "https://vpn.cyber/api/wireguard/client/{{ client_id }}/configuration"
+    url: "https://vpn.cyber/api/client/{{ client_id }}/configuration"
     method: GET
     headers:
       Cookie: "{{ login_response.cookies_string }}"

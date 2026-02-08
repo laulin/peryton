@@ -5,14 +5,16 @@
     method: POST
     body_format: json
     body:
+      username: "{{ vpn_username }}"
       password: "{{ vpn_password }}"
+      remember: false
     status_code: [200, 204]
     validate_certs: no
   register: login_response
 
 - name: Get existing clients
   uri:
-    url: "https://vpn.cyber/api/wireguard/client"
+    url: "https://vpn.cyber/api/client"
     method: GET
     headers:
       Cookie: "{{ login_response.cookies_string }}"
