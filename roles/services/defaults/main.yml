@@ -1,5 +1,7 @@
 ---
 
+user: services
+
 directories:
   - path: /server
     owner: "{{user}}"

@@ -1,6 +1,15 @@
 ---
 # tasks file for services
 
+- name: Create service user
+  user:
+    name: "{{ user }}"
+    system: yes
+    shell: /usr/sbin/nologin
+    create_home: no
+    password_lock: yes
+    state: present
+
 - name: Create directories
   file:
     path: "{{ item.path }}"
@@ -39,6 +48,7 @@
     dest: /server/fqcm
     version: main
     force: yes
+  become_user: "{{user}}"
 
 - name: homepage image
   ansible.builtin.copy:
