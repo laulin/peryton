@@ -15,6 +15,21 @@ user: "debian"
 # Admin password for Wireguard web interface (wg-easy) and API
 # This password is used to create new VPN accesses.
 vpn_password: "CHANGEME_VERY_SECURE_PASSWORD"
+wg_easy_host: 192.168.0.1
+wg_easy_port: 51821
+wg_easy_ipv4_cidr: 10.8.0.0/24
+
+# ------------------------------------------
+# 2b. Pihole Configuration
+# ------------------------------------------
+pihole_admin_password: CHANGEME_PIHOLE_PASSWORD
+
+# ------------------------------------------
+# 2c. QCM Configuration
+# ------------------------------------------
+qcm:
+  number_of_questions: 10
+  password: "CHANGEME_QCM_PASSWORD"
 
 # ------------------------------------------
 # 3. User Management
