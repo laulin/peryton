@@ -1,0 +1,98 @@
+# LLMs us
+chat.openai.com
+chatgpt.com
+claude.ai
+gemini.google.com
+bard.google.com
+copilot.microsoft.com
+www.bing.com/chat
+poe.com
+you.com
+perplexity.ai
+character.ai
+
+# Image AI
+midjourney.com
+www.midjourney.com
+leonardo.ai
+stablediffusionweb.com
+ideogram.ai
+playground.com
+runwayml.com
+
+# Code AI
+github.com/features/copilot
+codeium.com
+cursor.sh
+replit.com
+
+# Divers
+huggingface.co
+replicate.com
+openrouter.ai
+
+# LLM Chinois
+
+# DeepSeek
+chat.deepseek.com
+deepseek.com
+api.deepseek.com
+
+# Kimi (Moonshot AI) 
+kimi.moonshot.cn
+kimi.ai
+kimi-ai.chat
+
+# Baidu ERNIE / Wenxin Yiyan
+yiyan.baidu.com
+wenxin.baidu.com
+
+# Alibaba Tongyi Qianwen (Qwen)
+tongyi.aliyun.com
+qwen.aliyun.com
+tongyi.com
+
+# ByteDance Doubao
+doubao.com
+www.doubao.com
+
+# Zhipu AI / ChatGLM
+chatglm.cn
+open.bigmodel.cn
+
+# Tencent Yuanbao / Hunyuan
+yuanbao.tencent.com
+hunyuan.tencent.com
+
+# iFlytek Spark / Xinghuo
+xinghuo.xfyun.cn
+
+# SenseTime SenseNova
+sensechat.com
+
+# 360 AI / Zhinao
+ai.360.cn
+
+# Baichuan AI
+baichuan-ai.com
+
+# MiniMax
+minimax.chat
+
+# 01.AI
+01.ai
+
+# Stepfun
+stepfun.com
+
+# Hailuo AI
+hailuo.ai
+
+# Metaso
+metaso.cn
+
+# Autres services chinois
+wenxiaobai.com
+askmanyai.cn
+yixiaai.com
+wanzhi.com
