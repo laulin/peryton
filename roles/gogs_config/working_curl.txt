@@ -1,0 +1,64 @@
+ssh user@192.168.0.140 'set -e; 
+# Get CSRF token and cookie
+RESPONSE=$(curl -s -k -c /tmp/cookies.txt -b /tmp/cookies.txt https://gogs.cyber/install)
+CSRF=$(echo "$RESPONSE" | grep -o "name=\"_csrf\" content=\"[^\"]*\"" | sed "s/name=\"_csrf\" content=\"//" | sed "s/\"//")
+echo "CSRF token: $CSRF"
+
+# Try to submit the form with curl
+echo "Submitting form..."
+curl -v -k -b /tmp/cookies.txt \
+  -H "Referer: https://gogs.cyber/install" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "_csrf=$CSRF" \
+  --data-urlencode "db_type=SQLite3" \
+  --data-urlencode "db_host=" \
+  --data-urlencode "db_user=" \
+  --data-urlencode "db_passwd=" \
+  --data-urlencode "db_name=" \
+  --data-urlencode "db_schema=" \
+  --data-urlencode "ssl_mode=disable" \
+  --data-urlencode "db_path=/app/gogs/data/gogs.db" \
+  --data-urlencode "app_name=Gogs" \
+  --data-urlencode "repo_root_path=/data/git/gogs-repositories" \
+  --data-urlencode "run_user=git" \
+  --data-urlencode "domain=gogs.cyber" \
+  --data-urlencode "ssh_port=22" \
+  --data-urlencode "http_port=3000" \
+  --data-urlencode "app_url=https://gogs.cyber/" \
+  --data-urlencode "log_root_path=/app/gogs/log" \
+  --data-urlencode "default_branch=master" \
+  --data-urlencode "admin_name=testadmin" \
+  --data-urlencode "admin_passwd=testpassword123" \
+  --data-urlencode "admin_confirm_passwd=testpassword123" \
+  --data-urlencode "admin_email=admin@test.com" \
+  https://gogs.cyber/install 2>&1 | grep -E "HTTP|Location|< "
+'
+
+CSRF token: aMkJXEKYA3IoiGXwh4a1obPxTJc6MTc3MDQ3OTQ5ODQyMTE4NTg1Ng
+Submitting form...
+* using HTTP/2
+* [HTTP/2] [1] OPENED stream for https://gogs.cyber/install
+* [HTTP/2] [1] [:method: POST]
+* [HTTP/2] [1] [:scheme: https]
+* [HTTP/2] [1] [:authority: gogs.cyber]
+* [HTTP/2] [1] [:path: /install]
+* [HTTP/2] [1] [user-agent: curl/8.5.0]
+* [HTTP/2] [1] [accept: */*]
+* [HTTP/2] [1] [cookie: i_like_gogs=bf4e92130facb30e; _csrf=aMkJXEKYA3IoiGXwh4a
+1obPxTJc6MTc3MDQ3OTQ5ODQyMTE4NTg1Ng; lang=en-US]                               * [HTTP/2] [1] [referer: https://gogs.cyber/install]
+* [HTTP/2] [1] [content-type: application/x-www-form-urlencoded]
+* [HTTP/2] [1] [content-length: 510]
+> POST /install HTTP/2
+< HTTP/2 302 
+< alt-svc: h3=":443"; ma=2592000
+< date: Sat, 07 Feb 2026 15:51:54 GMT
+< location: https://gogs.cyber/user/login
+< permissions-policy: geolocation=(), microphone=()
+< referrer-policy: no-referrer
+< set-cookie: macaron_flash=success%3DWelcome%2521%2BWe%2527re%2Bglad%2Bthat%2B
+you%2Bchose%2BGogs%252C%2Bhave%2Bfun%2Band%2Btake%2Bcare.; Path=/              < strict-transport-security: max-age=31536000; includeSubDomains; preload
+< via: 1.1 Caddy
+< x-content-type-options: nosniff
+< x-frame-options: SAMEORIGIN
+< content-length: 0
+<

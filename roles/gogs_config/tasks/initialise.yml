@@ -22,67 +22,76 @@
 - name: Install Gogs
   when: gogs_root.status == 302 and '/install' in gogs_root.location
   block:
-    - name: Fetch install page for CSRF token
-      uri:
+    - name: Fetch install page
+      ansible.builtin.uri:
         url: "{{ gogs_url }}/install"
         method: GET
         return_content: yes
         validate_certs: no
+        follow_redirects: none
       register: install_page
 
     - name: Extract CSRF token
-      set_fact:
-        gogs_csrf_token: "{{ install_page.content | regex_search('name=\"_csrf\" content=\"([^\"]+)\"', '\\1') | first }}"
+      ansible.builtin.set_fact:
+        gogs_csrf_token: >-
+          {{
+            (install_page.content
+              | regex_findall('name="_csrf" content="([^"]+)"')
+              | first) | default('')
+          }}
 
     - name: Fail if CSRF token not found
-      fail:
+      ansible.builtin.fail:
         msg: "Could not extract CSRF token from install page"
-      when: gogs_csrf_token is not defined or gogs_csrf_token == ""
+      when: gogs_csrf_token | length < 10
 
-    - name: Submit installation form
-      uri:
+    - name: Build Cookie header (force _csrf)
+      ansible.builtin.set_fact:
+        gogs_cookie_header: >-
+          {{
+            (
+              (install_page.cookies_string | default(''))
+              | regex_replace('(^|;\\s*)_csrf=[^;]*', '\\1_csrf=' ~ gogs_csrf_token)
+            )
+            ~ ( '; _csrf=' ~ gogs_csrf_token if ((install_page.cookies_string | default('')) is not search('_csrf=')) else '' )
+          }}
+
+    - name: Submit installation form (minimal)
+      ansible.builtin.uri:
         url: "{{ gogs_url }}/install"
         method: POST
         validate_certs: no
         body_format: form-urlencoded
+        follow_redirects: none
+        status_code: [302, 200]
+        return_content: yes
+        headers:
+          Referer: "{{ gogs_url }}/install"
+          Cookie: "{{ gogs_cookie_header }}"
         body:
           _csrf: "{{ gogs_csrf_token }}"
+
           db_type: "SQLite3"
+          db_host: ""
+          db_user: ""
+          db_passwd: ""
+          db_name: ""
+          db_schema: ""
+          ssl_mode: "disable"
           db_path: "/app/gogs/data/gogs.db"
-          admin_name: "{{ gogs_admin_user }}"
-          admin_passwd: "{{ gogs_admin_pass }}"
-          admin_confirm_passwd: "{{ gogs_admin_pass }}"
-          admin_email: "{{ gogs_admin_email }}"
+
           app_name: "Gogs"
           repo_root_path: "/data/git/gogs-repositories"
           run_user: "git"
-          domain: "cyber"
+          domain: "gogs.cyber"
           ssh_port: "22"
           http_port: "3000"
           app_url: "https://gogs.cyber/"
           log_root_path: "/app/gogs/log"
           default_branch: "master"
-          
-          # SMTP Settings
-          smtp_host: "{{ gogs_smtp_host }}"
-          smtp_from: "{{ gogs_smtp_from }}"
-          smtp_user: "{{ gogs_smtp_user }}"
-          smtp_passwd: "{{ gogs_smtp_passwd }}"
-          
-          # Server and Service Settings
-          offline_mode: "{{ 'on' if gogs_offline_mode else omit }}"
-          disable_gravatar: "{{ 'on' if gogs_disable_gravatar else omit }}"
-          enable_federated_avatar: "{{ 'on' if gogs_enable_federated_avatar else omit }}"
-          disable_registration: "{{ 'on' if gogs_disable_registration else omit }}"
-          enable_captcha: "{{ 'on' if gogs_enable_captcha else omit }}"
-          require_sign_in_view: "{{ 'on' if gogs_require_sign_in_view else omit }}"
-          
-          # Email Services
-          enable_register_confirmation: "{{ 'on' if gogs_enable_register_confirmation else omit }}"
-          enable_notify_mail: "{{ 'on' if gogs_enable_notify_mail else omit }}"
-          
-          enable_login_status_persistence: "on"
-        status_code: [200, 302]
-        follow_redirects: yes
-        headers:
-          Cookie: "{{ install_page.cookies_string }}"
+
+          admin_name: "{{ gogs_admin_user }}"
+          admin_passwd: "{{ gogs_admin_pass }}"
+          admin_confirm_passwd: "{{ gogs_admin_pass }}"
+          admin_email: "{{ gogs_admin_email }}"
+      register: install_submit
